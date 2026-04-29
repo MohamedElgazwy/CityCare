@@ -12,6 +12,7 @@ type Technician = {
   description: string;
   price: number;
   rating: number;
+  photoUrl?: string;
 };
 
 export default function ServicesPage() {
@@ -32,6 +33,7 @@ export default function ServicesPage() {
     if (!hydrated) return;
     if (!user) return router.push('/auth/login');
     api('/categories').then(setCategories);
+    api('/technicians').then((res) => Array.isArray(res) && setTechs(res));
   }, [hydrated, router, user]);
 
   const search = async () => {
@@ -69,6 +71,7 @@ export default function ServicesPage() {
           {techs.map((t) => (
             <article key={t.id} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
               <h2 className="text-xl font-semibold text-slate-900">{t.name}</h2>
+              {t.photoUrl && <img src={t.photoUrl} alt={`${t.name} profile`} className="mt-3 h-16 w-16 rounded-full object-cover" />}
               <p className="mt-2 text-slate-600">{t.description}</p>
               <div className="mt-4 flex items-center justify-between text-sm text-slate-700">
                 <span>Price: ${t.price}</span>

@@ -1,4 +1,4 @@
-import { IsInt, IsNumber, IsPositive, IsString, Min } from 'class-validator';
+import { IsInt, IsNumber, IsPositive, IsString, IsUrl, Min } from 'class-validator';
 
 export class CreateTechnicianDto {
   @IsString()
@@ -17,4 +17,7 @@ export class CreateTechnicianDto {
   @IsInt()
   @IsPositive()
   categoryId: number;
+
+  @IsUrl()
+  photoUrl: string;
 }

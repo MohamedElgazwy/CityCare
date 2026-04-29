@@ -5,7 +5,7 @@ import { api } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
 import { useRouter } from 'next/navigation';
 
-type Technician = { id: number; name: string; description: string; isApproved: boolean; user?: { email: string } };
+type Technician = { id: number; name: string; description: string; isApproved: boolean; photoUrl?: string; user?: { email: string } };
 type Category = { id: number; name: string };
 type Booking = { id: number; status: string; user?: { email: string } };
 
@@ -64,6 +64,7 @@ export default function AdminDashboard() {
 
     <section className="space-y-2"><h2 className="text-lg font-semibold">Technician Applications</h2>
       {techs.map((t) => <article key={t.id} className="rounded border bg-white p-4"><p>{t.name} {t.user?.email ? `(${t.user.email})` : ''}</p>
+      {t.photoUrl && <img src={t.photoUrl} alt={`${t.name} profile`} className="mt-2 h-16 w-16 rounded-full object-cover" />}
       {!t.isApproved ? <button onClick={() => approve(t.id)} className="mt-2 rounded bg-blue-600 px-3 py-1 text-white">Approve</button> : <span>Approved</span>}</article>)}
     </section>
 
