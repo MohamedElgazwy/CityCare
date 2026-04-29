@@ -2,58 +2,109 @@
 
 import { useState } from 'react';
 import { api } from '@/lib/api';
+import { useRouter } from 'next/navigation';
+import { useAuthStore } from '@/store/authStore';
 
 export default function RegisterPage() {
+  const router = useRouter();
+  const setAuth = useAuthStore((s) => s.setAuth);
+
   const [form, setForm] = useState({
     name: '',
     email: '',
     password: '',
   });
 
-  const handleRegister = async () => {
-    await api('/auth/register', {
-      method: 'POST',
-      body: JSON.stringify(form),
-    });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-    alert('Registered ✅');
+  const handleRegister = async () => {
+    setLoading(true);
+    setError('');
+
+    try {
+      // ✅ validation
+      if (!form.name || !form.email || !form.password) {
+        throw new Error('All fields are required');
+      }
+
+      if (form.password.length < 6) {
+        throw new Error('Password must be at least 6 characters');
+      }
+
+      // ✅ register
+      await api('/auth/register', {
+        method: 'POST',
+        body: JSON.stringify(form),
+      });
+
+      // 🔥 auto login بعد التسجيل
+      const res = await api('/auth/login', {
+        method: 'POST',
+        body: JSON.stringify({
+          email: form.email,
+          password: form.password,
+        }),
+      });
+
+      if (!res.access_token) {
+        throw new Error('Login after register failed');
+      }
+
+      localStorage.setItem('token', res.access_token);
+      setAuth(res.user, res.access_token);
+
+      // ✅ redirect
+      router.push('/services');
+
+    } catch (err: any) {
+      setError(err.message || 'Something went wrong');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="p-10">
-      <h1 className="text-2xl mb-4">Register</h1>
+    <main className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-slate-50 px-6">
+      <section className="w-full max-w-md rounded-2xl border bg-white p-8 shadow-sm">
+        <h1 className="text-2xl font-bold">Create account</h1>
+        <p className="text-sm text-gray-500 mt-1">
+          Join CityCare and start booking services
+        </p>
 
-      <input
-        placeholder="Name"
-        onChange={(e) =>
-          setForm({ ...form, name: e.target.value })
-        }
-        className="border p-2 block"
-      />
+        <div className="mt-6 space-y-3">
+          <input
+            placeholder="Name"
+            onChange={(e) => setForm({ ...form, name: e.target.value })}
+            className="w-full border p-2 rounded"
+          />
 
-      <input
-        placeholder="Email"
-        onChange={(e) =>
-          setForm({ ...form, email: e.target.value })
-        }
-        className="border p-2 block mt-2"
-      />
+          <input
+            placeholder="Email"
+            onChange={(e) => setForm({ ...form, email: e.target.value })}
+            className="w-full border p-2 rounded"
+          />
 
-      <input
-        type="password"
-        placeholder="Password"
-        onChange={(e) =>
-          setForm({ ...form, password: e.target.value })
-        }
-        className="border p-2 block mt-2"
-      />
+          <input
+            type="password"
+            placeholder="Password"
+            onChange={(e) => setForm({ ...form, password: e.target.value })}
+            className="w-full border p-2 rounded"
+          />
 
-      <button
-        onClick={handleRegister}
-        className="bg-black text-white p-2 mt-4"
-      >
-        Register
-      </button>
-    </div>
+          {error && (
+            <p className="text-red-500 text-sm">{error}</p>
+          )}
+
+          <button
+            onClick={handleRegister}
+            disabled={loading}
+            className="w-full bg-black text-white p-2 rounded hover:bg-gray-800"
+          >
+            {loading ? 'Creating account...' : 'Register'}
+          </button>
+        </div>
+      </section>
+    </main>
   );
 }
