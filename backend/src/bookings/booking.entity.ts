@@ -1,15 +1,11 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  ManyToOne,
-  Column,
-} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, ManyToOne, Column } from 'typeorm';
 import { User } from '../users/user.entity';
 import { Technician } from '../technicians/technician.entity';
 
 export enum BookingStatus {
   PENDING = 'pending',
   ACCEPTED = 'accepted',
+  REJECTED = 'rejected',
   COMPLETED = 'completed',
   CANCELLED = 'cancelled',
 }
@@ -19,7 +15,7 @@ export class Booking {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, (user) => user.bookings)
   user: User;
 
   @ManyToOne(() => Technician)

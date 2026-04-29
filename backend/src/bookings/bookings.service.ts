@@ -39,6 +39,22 @@ export class BookingsService {
     return this.bookingRepo.save(booking);
   }
 
+
+  async reject(id: number, technicianUserId: number) {
+    const booking = await this.bookingRepo.findOne({ where: { id }, relations: ['technician', 'technician.user'] });
+
+    if (!booking) throw new NotFoundException('Booking not found');
+    if (booking.technician.user.id !== technicianUserId) throw new BadRequestException('Not your booking');
+    if (booking.status !== BookingStatus.PENDING) throw new BadRequestException('Only pending bookings can be rejected');
+
+    booking.status = BookingStatus.REJECTED;
+    return this.bookingRepo.save(booking);
+  }
+
+  getAll() {
+    return this.bookingRepo.find({ relations: ['user', 'technician', 'technician.user'] });
+  }
+
   async complete(id: number, technicianUserId: number) {
     const booking = await this.bookingRepo.findOne({ where: { id }, relations: ['technician', 'technician.user'] });
 
