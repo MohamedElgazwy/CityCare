@@ -1,50 +1,37 @@
-import {
-  Controller,
-  Post,
-  Body,
-  UseGuards,
-  Req,
-  Patch,
-  Param,
-  Get,
-  Query,
-} from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Req, Patch, Param, Get, Query, ParseIntPipe } from '@nestjs/common';
 
 import { TechniciansService } from './technicians.service';
 import { RolesGuard } from '../common/guards/roles.guard';
 import { Roles } from '../common/decorators/roles.decorator';
 import { JwtAuthGuard } from 'src/auth/strategies/jwt-auth.guard';
+import { Role } from 'src/users/user.entity';
+import { CreateTechnicianDto } from './dto/create-technician.dto';
 
 @Controller('technicians')
 export class TechniciansController {
   constructor(private techService: TechniciansService) {}
 
-  // 👨‍🔧 Technician Register
   @Post('register')
-  @UseGuards(JwtAuthGuard)
-  @Roles('USER')
-  register(@Body() body: any, @Req() req) {
-    return this.techService.create({
-      ...body,
-      userId: req.user.sub,
-    });
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.USER)
+  register(@Body() body: CreateTechnicianDto, @Req() req) {
+    return this.techService.create(body, req.user.userId);
   }
 
-  // 🛡 Admin Approve Technician
   @Patch(':id/approve')
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('ADMIN')
-  approve(@Param('id') id: number) {
+  @Roles(Role.ADMIN)
+  approve(@Param('id', ParseIntPipe) id: number) {
     return this.techService.approve(id);
   }
 
   @Get()
   getApprovedTechnicians() {
-  return this.techService.findAllApproved();
-}
+    return this.techService.findAllApproved();
+  }
 
   @Get('search')
-search(@Query() query: any) {
-  return this.techService.search(query);
-}
+  search(@Query() query: any) {
+    return this.techService.search(query);
+  }
 }
