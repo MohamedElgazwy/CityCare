@@ -1,91 +1,26 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f8fafc;
-  --foreground: #0f172a;
-}
-
-/* Role themes */
-:root.role-user {
-  --background: #f8fafc;
-  --foreground: #0f172a;
-  --theme-500: #0f172a; /* default dark */
-  --theme-600: #0b1220;
-  --accent: #0f172a;
-  --nav-bg: #ffffff;
-  --nav-text: #0f172a;
-  --nav-active-bg: #0f172a;
-  --nav-active-text: #ffffff;
-  --card-bg: #ffffff;
-  --card-border: #e6e6e6;
-  --button-bg: #0f172a;
-  --button-text: #ffffff;
-}
-
-:root.role-technician {
-  --background: #ecfeff;
-  --foreground: #06343a;
-  --theme-500: #0ea5a4; /* teal */
-  --theme-600: #0b8b88;
-  --accent: #0ea5a4;
-  --nav-bg: #0ea5a4;
-  --nav-text: #ffffff;
-  --nav-active-bg: #0b8b88;
-  --nav-active-text: #ffffff;
-  --card-bg: #ffffff;
-  --card-border: #86efac33;
-  --button-bg: #0ea5a4;
-  --button-text: #ffffff;
-}
-
-:root.role-admin {
-  --background: #f5f3ff;
-  --foreground: #2a0d4a;
-  --theme-500: #7c3aed; /* violet */
-  --theme-600: #6b21a8;
-  --accent: #7c3aed;
-  --nav-bg: #7c3aed;
-  --nav-text: #ffffff;
-  --nav-active-bg: #6b21a8;
-  --nav-active-text: #ffffff;
-  --card-bg: #ffffff;
-  --card-border: #c7b3ff33;
-  --button-bg: #7c3aed;
-  --button-text: #ffffff;
+  --background: linear-gradient(140deg, #fdebf4 0%, #e0f7fa 45%, #f3e5f5 100%);
+  --foreground: #1e293b;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Inter, Arial, Helvetica, sans-serif;
+  min-height: 100vh;
 }
 
-/* Utility classes to use theme variables */
-.theme-bg { background-color: var(--theme-500); }
-.theme-bg-600 { background-color: var(--theme-600); }
-.theme-accent { color: var(--accent); }
-.theme-card { background-color: var(--card-bg); }
-
-/* Site-wide theme components */
-.site-nav {
-  background-color: var(--nav-bg);
-  color: var(--nav-text);
-  border-bottom: 1px solid rgba(0,0,0,0.04);
-}
-.site-nav a { color: var(--nav-text); }
-.site-nav a.active { background: var(--nav-active-bg); color: var(--nav-active-text); }
-
-/* Buttons: fall back to theme colors */
-button {
-  background: var(--button-bg);
-  color: var(--button-text);
+.page-container {
+  position: relative;
+  color: var(--foreground);
 }
 
-/* Cards: default card background and border color */
-.rounded-2xl.border {
-  background: var(--card-bg) !important;
-  border-color: var(--card-border) !important;
+@keyframes floatOrb {
+  0%, 100% { transform: translateY(0px); opacity: .5; }
+  50% { transform: translateY(-12px); opacity: .9; }
 }
 
-/* Page container optional helper */
-.page-container { background: var(--background); color: var(--foreground); }
+.float-orb { animation: floatOrb 6s ease-in-out infinite; }
+.float-orb-delay { animation: floatOrb 7s ease-in-out 1s infinite; }
