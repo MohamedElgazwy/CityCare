@@ -25,6 +25,9 @@ export class Technician {
   @Column({ default: 0 })
   rating: number;
 
+  @Column({ type: 'text' })
+  photoUrl: string;
+
   @ManyToOne(() => Category, (category) => category.technicians)
   category: Category;
 
