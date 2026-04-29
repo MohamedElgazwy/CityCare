@@ -1,6 +1,8 @@
 const API_URL = 'http://localhost:3000';
 
-export const api = async (endpoint: string, options: any = {}) => {
+type ApiOptions = RequestInit & { headers?: Record<string, string> };
+
+export const api = async (endpoint: string, options: ApiOptions = {}) => {
   const token = localStorage.getItem('token');
 
   const res = await fetch(`${API_URL}${endpoint}`, {
@@ -13,12 +15,10 @@ export const api = async (endpoint: string, options: any = {}) => {
   });
 
   const text = await res.text();
-  console.log(res);
 
-try {
-  return JSON.parse(text);
-} catch {
-  throw new Error(text); // 👈 يعرض الخطأ الحقيقي
-}
-
+  try {
+    return JSON.parse(text) as unknown;
+  } catch {
+    throw new Error(text);
+  }
 };

@@ -23,48 +23,40 @@ export class TechniciansService {
     const category = await this.categoryRepo.findOne({ where: { id: data.categoryId } });
     const user = await this.userRepo.findOne({ where: { id: userId } });
 
-    if (!category) {
-      throw new NotFoundException('Category not found');
-    }
-
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
+    if (!category) throw new NotFoundException('Category not found');
+    if (!user) throw new NotFoundException('User not found');
 
     const existingTechnician = await this.repo.findOne({ where: { user: { id: user.id } } });
-    if (existingTechnician || user.role === Role.TECHNICIAN) {
-      throw new BadRequestException('Technician profile already exists');
-    }
+    if (existingTechnician) throw new BadRequestException('Technician profile already exists');
 
-    const technician = await this.repo.save({
+    return this.repo.save({
       name: data.name,
       phone: data.phone,
       description: data.description,
       price: data.price,
       category,
       user,
+      isApproved: false,
     });
-
-    user.role = Role.TECHNICIAN;
-    await this.userRepo.save(user);
-
-    return technician;
   }
 
   async approve(id: number) {
-    const tech = await this.repo.findOne({ where: { id } });
-
+    const tech = await this.repo.findOne({ where: { id }, relations: ['user'] });
     if (!tech) throw new NotFoundException('Technician not found');
 
     tech.isApproved = true;
+    tech.user.role = Role.TECHNICIAN;
+
+    await this.userRepo.save(tech.user);
     return this.repo.save(tech);
   }
 
   findAllApproved() {
-    return this.repo.find({
-      where: { isApproved: true },
-      relations: ['category'],
-    });
+    return this.repo.find({ where: { isApproved: true }, relations: ['category'] });
+  }
+
+  findAllForAdmin() {
+    return this.repo.find({ relations: ['category', 'user'] });
   }
 
   async search(query: any) {

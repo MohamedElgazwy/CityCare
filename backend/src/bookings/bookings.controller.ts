@@ -24,11 +24,25 @@ export class BookingsController {
     return this.service.accept(id, req.user.userId);
   }
 
+  @Patch(':id/reject')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.TECHNICIAN)
+  reject(@Param('id', ParseIntPipe) id: number, @Req() req) {
+    return this.service.reject(id, req.user.userId);
+  }
+
   @Patch(':id/complete')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.TECHNICIAN)
   complete(@Param('id', ParseIntPipe) id: number, @Req() req) {
     return this.service.complete(id, req.user.userId);
+  }
+
+  @Get('all')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  getAll() {
+    return this.service.getAll();
   }
 
   @Get('my')
@@ -38,3 +52,5 @@ export class BookingsController {
     return this.service.getMyBookings(req.user.userId);
   }
 }
+
+

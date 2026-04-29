@@ -4,7 +4,7 @@ import { UsersService } from 'src/users/users.service';
 import * as bcrypt from 'bcrypt';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
-import { User } from 'src/users/user.entity';
+import { Role, User } from 'src/users/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -23,8 +23,10 @@ export class AuthService {
     const hashedPassword = await bcrypt.hash(data.password, 10);
 
     const user = await this.usersService.create({
-      ...data,
+      name: data.name,
+      email: data.email,
       password: hashedPassword,
+      role: Role.USER,
     });
 
     return this.generateToken(user);
@@ -41,10 +43,6 @@ export class AuthService {
 
     if (!isMatch) {
       throw new UnauthorizedException('Invalid credentials');
-    }
-
-    if (user.role !== data.role) {
-      throw new UnauthorizedException('Role does not match this account');
     }
 
     return this.generateToken(user);
