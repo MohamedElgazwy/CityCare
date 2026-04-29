@@ -7,6 +7,7 @@ import {
   Patch,
   Param,
   Get,
+  Query,
 } from '@nestjs/common';
 
 import { TechniciansService } from './technicians.service';
@@ -40,5 +41,10 @@ export class TechniciansController {
   @Get()
   getApprovedTechnicians() {
   return this.techService.findAllApproved();
+}
+
+  @Get('search')
+search(@Query() query: any) {
+  return this.techService.search(query);
 }
 }

@@ -34,26 +34,23 @@ export class ReviewsService {
       throw new BadRequestException('Booking not completed');
     }
 
+    // ✅ save review
     const review = await this.reviewRepo.save({
       booking,
       rating: data.rating,
       comment: data.comment,
     });
 
-    // 🔥 تحديث rating
-    const reviews = await this.reviewRepo.find({
-      relations: ['booking', 'booking.technician'],
-    });
+    // 🔥 OPTIMIZED: احسب average من DB مباشرة
+    const result = await this.reviewRepo
+      .createQueryBuilder('review')
+      .leftJoin('review.booking', 'booking')
+      .leftJoin('booking.technician', 'tech')
+      .where('tech.id = :id', { id: booking.technician.id })
+      .select('AVG(review.rating)', 'avg')
+      .getRawOne();
 
-    const techReviews = reviews.filter(
-      (r) => r.booking.technician.id === booking.technician.id,
-    );
-
-    const avg =
-      techReviews.reduce((acc, r) => acc + r.rating, 0) /
-      techReviews.length;
-
-    booking.technician.rating = avg;
+    booking.technician.rating = Number(result.avg);
 
     await this.techRepo.save(booking.technician);
 

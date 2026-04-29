@@ -35,4 +35,47 @@ export class TechniciansService {
       where: { isApproved: true },
     });
   }
+
+  async search(query: any) {
+  const qb = this.repo
+    .createQueryBuilder('tech')
+    .leftJoinAndSelect('tech.category', 'category')
+    .where('tech.isApproved = true');
+
+  // 🔍 search by name
+  if (query.name) {
+    qb.andWhere('tech.name ILIKE :name', {
+      name: `%${query.name}%`,
+    });
+  }
+
+  // 📂 filter by category
+  if (query.categoryId) {
+    qb.andWhere('category.id = :categoryId', {
+      categoryId: query.categoryId,
+    });
+  }
+
+  // 💰 price range
+  if (query.minPrice) {
+    qb.andWhere('tech.price >= :minPrice', {
+      minPrice: query.minPrice,
+    });
+  }
+
+  if (query.maxPrice) {
+    qb.andWhere('tech.price <= :maxPrice', {
+      maxPrice: query.maxPrice,
+    });
+  }
+
+  // ⭐ rating
+  if (query.rating) {
+    qb.andWhere('tech.rating >= :rating', {
+      rating: query.rating,
+    });
+  }
+
+  return qb.getMany();
+}
 }
