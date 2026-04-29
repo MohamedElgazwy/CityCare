@@ -3,6 +3,7 @@ import { Roles } from "src/common/decorators/roles.decorator";
 import { CategoriesService } from "./categories.service";
 import { JwtAuthGuard } from "src/auth/strategies/jwt-auth.guard";
 import { RolesGuard } from "src/common/guards/roles.guard";
+import { Role } from 'src/users/user.entity';
 
 @Controller('categories')
 export class CategoriesController {
@@ -11,7 +12,7 @@ export class CategoriesController {
   // 🛡 Admin only
   @Post()
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('ADMIN')
+  @Roles(Role.ADMIN)
   create(@Body() body: any) {
     return this.service.create(body.name);
   }
