@@ -43,6 +43,9 @@ export default function TechnicianDashboard() {
           const categoryRes = await api('/categories');
           if (Array.isArray(categoryRes)) {
             setCategories(categoryRes);
+            if (categoryRes.length === 0) {
+              setError('No categories available yet. Ask admin to add categories in the admin dashboard.');
+            }
           }
         }
       } catch (err: unknown) {
@@ -111,8 +114,13 @@ export default function TechnicianDashboard() {
           <input placeholder="Phone" className="w-full rounded border p-2" onChange={(e) => setForm({ ...form, phone: e.target.value })} />
           <textarea placeholder="Description" className="w-full rounded border p-2" onChange={(e) => setForm({ ...form, description: e.target.value })} />
           <input placeholder="Service price" type="number" className="w-full rounded border p-2" onChange={(e) => setForm({ ...form, price: e.target.value })} />
-          <select className="w-full rounded border p-2" onChange={(e) => setForm({ ...form, categoryId: e.target.value })}>
-            <option value="">Choose field</option>
+          <select
+            className="w-full rounded border p-2"
+            value={form.categoryId}
+            onChange={(e) => setForm({ ...form, categoryId: e.target.value })}
+            disabled={categories.length === 0}
+          >
+            <option value="">{categories.length === 0 ? 'No categories available' : 'Choose field'}</option>
             {categories.map((c) => (
               <option key={c.id} value={c.id}>{c.name}</option>
             ))}
