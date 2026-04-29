@@ -43,6 +43,10 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
+    if (user.role !== data.role) {
+      throw new UnauthorizedException('Role does not match this account');
+    }
+
     return this.generateToken(user);
   }
 

@@ -13,6 +13,7 @@ export default function RegisterPage() {
     name: '',
     email: '',
     password: '',
+    role: 'USER',
   });
 
   const [loading, setLoading] = useState(false);
@@ -24,7 +25,7 @@ export default function RegisterPage() {
 
     try {
       // ✅ validation
-      if (!form.name || !form.email || !form.password) {
+      if (!form.name || !form.email || !form.password || !form.role) {
         throw new Error('All fields are required');
       }
 
@@ -44,6 +45,7 @@ export default function RegisterPage() {
         body: JSON.stringify({
           email: form.email,
           password: form.password,
+          role: form.role,
         }),
       });
 
@@ -55,7 +57,13 @@ export default function RegisterPage() {
       setAuth(res.user, res.access_token);
 
       // ✅ redirect
-      router.push('/services');
+      if (res.user.role === 'ADMIN') {
+        router.push('/dashboard/admin');
+      } else if (res.user.role === 'TECHNICIAN') {
+        router.push('/dashboard/technician');
+      } else {
+        router.push('/services');
+      }
 
     } catch (err: any) {
       setError(err.message || 'Something went wrong');
@@ -91,6 +99,16 @@ export default function RegisterPage() {
             onChange={(e) => setForm({ ...form, password: e.target.value })}
             className="w-full border p-2 rounded"
           />
+
+          <select
+            value={form.role}
+            onChange={(e) => setForm({ ...form, role: e.target.value })}
+            className="w-full border p-2 rounded bg-white"
+          >
+            <option value="USER">User</option>
+            <option value="TECHNICIAN">Technician</option>
+            <option value="ADMIN">Admin</option>
+          </select>
 
           {error && (
             <p className="text-red-500 text-sm">{error}</p>
