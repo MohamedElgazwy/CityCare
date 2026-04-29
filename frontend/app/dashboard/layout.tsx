@@ -2,6 +2,8 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useEffect } from 'react';
+import { useAuthStore } from '@/store/authStore';
 
 const dashboardLinks = [
   { href: '/dashboard/admin', label: 'Admin Panel' },
@@ -10,6 +12,11 @@ const dashboardLinks = [
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const { user, hydrate, hydrated } = useAuthStore();
+
+  useEffect(() => {
+    hydrate();
+  }, [hydrate]);
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -18,13 +25,25 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <h2 className="mb-4 text-lg font-semibold text-slate-900">Dashboard</h2>
           <div className="space-y-2">
             {dashboardLinks.map((link) => (
+              (() => {
+                const isAdminLink = link.href === '/dashboard/admin';
+                const isTechnicianLink = link.href === '/dashboard/technician';
+                const isDisabled = hydrated && !!user && ((user.role === 'TECHNICIAN' && isAdminLink) || (user.role === 'ADMIN' && isTechnicianLink));
+
+                return (
               <Link
                 key={link.href}
-                href={link.href}
-                className={`block rounded-lg px-3 py-2 text-sm font-medium ${pathname === link.href ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100'}`}
+                href={isDisabled ? '#' : link.href}
+                aria-disabled={isDisabled}
+                onClick={(e) => {
+                  if (isDisabled) e.preventDefault();
+                }}
+                className={`block rounded-lg px-3 py-2 text-sm font-medium ${pathname === link.href ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-100'} ${isDisabled ? 'cursor-not-allowed opacity-50 hover:bg-transparent' : ''}`}
               >
                 {link.label}
               </Link>
+                );
+              })()
             ))}
           </div>
         </aside>

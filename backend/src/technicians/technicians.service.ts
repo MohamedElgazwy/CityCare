@@ -37,6 +37,7 @@ export class TechniciansService {
       category,
       user,
       isApproved: false,
+      photoUrl: data.photoUrl,
     });
   }
 
