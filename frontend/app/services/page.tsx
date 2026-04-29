@@ -64,7 +64,7 @@ export default function ServicesPage() {
                 <span>Price: ${t.price}</span>
                 <span>⭐ {t.rating}</span>
               </div>
-              <button onClick={() => api(`/bookings/${t.id}`, { method: 'POST' })} className="mt-4 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-500">
+              <button onClick={() => api('/bookings', { method: 'POST', body: JSON.stringify({ technicianId: t.id }) })} className="mt-4 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-500">
                 Book Now
               </button>
             </article>
