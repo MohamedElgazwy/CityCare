@@ -3,98 +3,74 @@
 import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
 
-export default function ServicesPage() {
-  const [techs, setTechs] = useState([]);
-  const [categories, setCategories] = useState([]);
+type Category = { id: number; name: string };
+type Technician = {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  rating: number;
+};
 
-  // 🔍 filters
+export default function ServicesPage() {
+  const [techs, setTechs] = useState<Technician[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
   const [name, setName] = useState('');
   const [categoryId, setCategoryId] = useState('');
   const [minPrice, setMinPrice] = useState('');
   const [rating, setRating] = useState('');
 
-  // 📥 load categories
   useEffect(() => {
     api('/categories').then(setCategories);
   }, []);
 
-  // 🔍 search function
   const search = async () => {
-    const query = new URLSearchParams({
-      name,
-      categoryId,
-      minPrice,
-      rating,
-    });
-
+    setIsLoading(true);
+    const query = new URLSearchParams({ name, categoryId, minPrice, rating });
     const res = await api(`/technicians/search?${query}`);
     setTechs(res);
+    setIsLoading(false);
   };
 
   return (
-    <div className="p-10">
-      <h1 className="text-2xl mb-4">Services</h1>
+    <main className="min-h-screen bg-slate-50 px-6 py-8 lg:px-8">
+      <div className="mx-auto max-w-7xl">
+        <h1 className="text-3xl font-bold text-slate-900">Find a service</h1>
+        <p className="mt-2 text-slate-600">Filter by specialty, budget, and rating to hire the right technician.</p>
 
-      {/* 🔍 Filters */}
-      <div className="bg-gray-100 p-4 mb-6 rounded">
-        <input
-          placeholder="Search by name"
-          onChange={(e) => setName(e.target.value)}
-          className="border p-2 mr-2"
-        />
-
-        <select
-          onChange={(e) => setCategoryId(e.target.value)}
-          className="border p-2 mr-2"
-        >
-          <option value="">All Categories</option>
-          {categories.map((c: any) => (
-            <option key={c.id} value={c.id}>
-              {c.name}
-            </option>
-          ))}
-        </select>
-
-        <input
-          placeholder="Min Price"
-          type="number"
-          onChange={(e) => setMinPrice(e.target.value)}
-          className="border p-2 mr-2"
-        />
-
-        <input
-          placeholder="Rating (e.g 4)"
-          type="number"
-          onChange={(e) => setRating(e.target.value)}
-          className="border p-2 mr-2"
-        />
-
-        <button
-          onClick={search}
-          className="bg-black text-white p-2"
-        >
-          Search
-        </button>
-      </div>
-
-      {/* 👨‍🔧 Results */}
-      {techs.map((t: any) => (
-        <div key={t.id} className="border p-4 mb-4">
-          <h2 className="text-lg">{t.name}</h2>
-          <p>{t.description}</p>
-          <p>Price: {t.price}</p>
-          <p>Rating: {t.rating}</p>
-
-          <button
-            onClick={() =>
-              api(`/bookings/${t.id}`, { method: 'POST' })
-            }
-            className="bg-green-500 text-white p-2 mt-2"
-          >
-            Book Now
+        <div className="mt-6 grid gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm md:grid-cols-5">
+          <input placeholder="Search by name" onChange={(e) => setName(e.target.value)} className="rounded-lg border border-slate-300 px-3 py-2" />
+          <select onChange={(e) => setCategoryId(e.target.value)} className="rounded-lg border border-slate-300 px-3 py-2">
+            <option value="">All Categories</option>
+            {categories.map((c) => (
+              <option key={c.id} value={c.id}>{c.name}</option>
+            ))}
+          </select>
+          <input placeholder="Min price" type="number" onChange={(e) => setMinPrice(e.target.value)} className="rounded-lg border border-slate-300 px-3 py-2" />
+          <input placeholder="Min rating" type="number" onChange={(e) => setRating(e.target.value)} className="rounded-lg border border-slate-300 px-3 py-2" />
+          <button onClick={search} className="rounded-lg bg-slate-900 px-4 py-2 font-semibold text-white hover:bg-slate-700">
+            {isLoading ? 'Searching...' : 'Search'}
           </button>
         </div>
-      ))}
-    </div>
+
+        <div className="mt-6 grid gap-4 md:grid-cols-2">
+          {techs.map((t) => (
+            <article key={t.id} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+              <h2 className="text-xl font-semibold text-slate-900">{t.name}</h2>
+              <p className="mt-2 text-slate-600">{t.description}</p>
+              <div className="mt-4 flex items-center justify-between text-sm text-slate-700">
+                <span>Price: ${t.price}</span>
+                <span>⭐ {t.rating}</span>
+              </div>
+              <button onClick={() => api(`/bookings/${t.id}`, { method: 'POST' })} className="mt-4 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-500">
+                Book Now
+              </button>
+            </article>
+          ))}
+        </div>
+      </div>
+    </main>
   );
 }
