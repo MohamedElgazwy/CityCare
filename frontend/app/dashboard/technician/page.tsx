@@ -50,8 +50,15 @@ export default function TechnicianDashboard() {
   }, [hydrated, router, user]);
 
   const updateStatus = async (id: number, endpoint: 'accept' | 'reject' | 'complete', nextStatus: string) => {
-    await api(`/bookings/${id}/${endpoint}`, { method: 'PATCH' });
-    setBookings((prev) => prev.map((b) => (b.id === id ? { ...b, status: nextStatus } : b)));
+    try {
+      await api(`/bookings/${id}/${endpoint}`, { method: 'PATCH' });
+      setBookings((prev) => prev.map((b) => (b.id === id ? { ...b, status: nextStatus } : b)));
+      if (endpoint === 'accept') {
+        alert('Booking accepted! The user will be notified.');
+      }
+    } catch (err) {
+      alert('Failed to update booking status.');
+    }
   };
 
   const uploadPhoto = (file: File) => {

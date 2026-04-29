@@ -72,4 +72,11 @@ export class BookingsService {
       relations: ['user', 'technician', 'technician.user'],
     });
   }
+
+  getUserBookings(userId: number) {
+    return this.bookingRepo.find({
+      where: { user: { id: userId } },
+      relations: ['user', 'technician', 'technician.user'],
+    });
+  }
 }

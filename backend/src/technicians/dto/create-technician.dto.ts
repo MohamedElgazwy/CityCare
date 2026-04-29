@@ -18,6 +18,6 @@ export class CreateTechnicianDto {
   @IsPositive()
   categoryId: number;
 
-  @IsUrl()
+  @IsString()
   photoUrl: string;
 }

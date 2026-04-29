@@ -51,6 +51,13 @@ export class BookingsController {
   getMyBookings(@Req() req) {
     return this.service.getMyBookings(req.user.userId);
   }
+
+  @Get('me')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.USER)
+  getMyUserBookings(@Req() req) {
+    return this.service.getUserBookings(req.user.userId);
+  }
 }
 
 
