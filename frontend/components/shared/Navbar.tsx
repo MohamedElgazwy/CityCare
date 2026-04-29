@@ -7,9 +7,9 @@ import { useAuthStore } from '@/store/authStore';
 import Button from '@/components/ui/Button';
 
 const defaultNav = [
-  { href: '/', label: 'Home' },
-  { href: '/services', label: 'Services' },
-  { href: '/dashboard/technician', label: 'Dashboard' },
+  { href: '/', label: 'الرئيسية' },
+  { href: '/services', label: 'الخدمات' },
+  { href: '/dashboard/technician', label: 'لوحة التحكم' },
 ];
 
 export default function Navbar() {
@@ -22,7 +22,7 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-white/40 bg-white/35 backdrop-blur-xl">
       <nav className="mx-auto flex h-18 w-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link href="/" className="text-xl font-bold tracking-tight text-slate-800">CityCare</Link>
+        <Link href="/" className="text-xl font-bold tracking-tight text-slate-800">CityCare - مدينة الشروق</Link>
         <div className="flex items-center gap-2">
           {defaultNav.map((item) => {
             const isActive = pathname === item.href;
@@ -31,10 +31,10 @@ export default function Navbar() {
           {hydrated && user ? (
             <>
               <Link href="/profile" className="hidden rounded-full bg-white/70 px-3 py-2 text-sm text-slate-700 sm:block">{user.name || user.email}</Link>
-              <Button variant="ghost" onClick={() => { logout(); router.push('/'); }}>Logout</Button>
+              <Button variant="ghost" onClick={() => { logout(); router.push('/'); }}>تسجيل الخروج</Button>
             </>
           ) : (
-            <Link href="/auth/login" className="rounded-full bg-white/70 px-4 py-2 text-sm text-slate-700">Login</Link>
+            <Link href="/auth/login" className="rounded-full bg-white/70 px-4 py-2 text-sm text-slate-700">تسجيل الدخول</Link>
           )}
         </div>
       </nav>

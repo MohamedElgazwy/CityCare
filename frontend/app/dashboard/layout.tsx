@@ -6,8 +6,8 @@ import { useEffect } from 'react';
 import { useAuthStore } from '@/store/authStore';
 
 const dashboardLinks = [
-  { href: '/dashboard/admin', label: 'Admin Panel' },
-  { href: '/dashboard/technician', label: 'Technician Panel' },
+  { href: '/dashboard/admin', label: 'لوحة الإدارة' },
+  { href: '/dashboard/technician', label: 'لوحة الفني' },
 ];
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -19,10 +19,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }, [hydrate]);
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-transparent">
       <div className="mx-auto grid max-w-7xl gap-6 px-6 py-8 lg:grid-cols-[250px_1fr] lg:px-8">
         <aside className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-          <h2 className="mb-4 text-lg font-semibold text-slate-900">Dashboard</h2>
+          <h2 className="mb-4 text-lg font-semibold text-slate-900">لوحة التحكم</h2>
           <div className="space-y-2">
             {dashboardLinks.map((link) => (
               (() => {
