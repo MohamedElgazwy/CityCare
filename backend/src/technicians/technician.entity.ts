@@ -1,6 +1,8 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 import { ManyToOne } from "typeorm";
 import { Category } from "src/categories/category.entity";
+import { ManyToOne } from "typeorm";
+import { User } from "src/users/user.entity";
 
 @Entity()
 export class Technician {
@@ -27,4 +29,7 @@ export class Technician {
 
   @ManyToOne(() => Category, (category) => category.technicians)
   category: Category;
+
+  @ManyToOne(() => User)
+  user: User;
 }

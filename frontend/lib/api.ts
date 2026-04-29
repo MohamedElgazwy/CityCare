@@ -12,5 +12,13 @@ export const api = async (endpoint: string, options: any = {}) => {
     },
   });
 
-  return res.json();
+  const text = await res.text();
+  console.log(res);
+
+try {
+  return JSON.parse(text);
+} catch {
+  throw new Error(text); // 👈 يعرض الخطأ الحقيقي
+}
+
 };
