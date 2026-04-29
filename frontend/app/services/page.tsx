@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useAuthStore } from '@/store/authStore';
+import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
 
 type Category = { id: number; name: string };
@@ -13,6 +15,8 @@ type Technician = {
 };
 
 export default function ServicesPage() {
+  const router = useRouter();
+  const { user, hydrate, hydrated } = useAuthStore();
   const [techs, setTechs] = useState<Technician[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -22,9 +26,13 @@ export default function ServicesPage() {
   const [minPrice, setMinPrice] = useState('');
   const [rating, setRating] = useState('');
 
+  useEffect(() => { hydrate(); }, [hydrate]);
+
   useEffect(() => {
+    if (!hydrated) return;
+    if (!user) return router.push('/auth/login');
     api('/categories').then(setCategories);
-  }, []);
+  }, [hydrated, router, user]);
 
   const search = async () => {
     setIsLoading(true);
@@ -33,6 +41,8 @@ export default function ServicesPage() {
     setTechs(res);
     setIsLoading(false);
   };
+
+  if (!hydrated || !user) return <p className="p-6">Loading...</p>;
 
   return (
     <main className="min-h-screen bg-slate-50 px-6 py-8 lg:px-8">

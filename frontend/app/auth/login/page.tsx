@@ -11,7 +11,6 @@ export default function LoginPage() {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState('USER');
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -22,13 +21,13 @@ export default function LoginPage() {
 
     try {
       // ✅ validation
-      if (!email || !password || !role) {
+      if (!email || !password) {
         throw new Error('Email and password are required');
       }
 
       const res = await api('/auth/login', {
         method: 'POST',
-        body: JSON.stringify({ email, password, role }),
+        body: JSON.stringify({ email, password }),
       });
 
       if (!res.access_token) {
@@ -48,8 +47,8 @@ export default function LoginPage() {
         router.push('/services');
       }
 
-    } catch (err: any) {
-      setError(err.message || 'Something went wrong');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Something went wrong');
     } finally {
       setLoading(false);
     }
@@ -77,15 +76,7 @@ export default function LoginPage() {
             className="w-full border p-2 rounded"
           />
 
-          <select
-            value={role}
-            onChange={(e) => setRole(e.target.value)}
-            className="w-full border p-2 rounded bg-white"
-          >
-            <option value="USER">User</option>
-            <option value="TECHNICIAN">Technician</option>
-            <option value="ADMIN">Admin</option>
-          </select>
+          
 
           {error && (
             <p className="text-red-500 text-sm">{error}</p>
