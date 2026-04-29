@@ -1,5 +1,5 @@
-// src/users/user.entity.ts
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne } from 'typeorm';
+import { Technician } from 'src/technicians/technician.entity';
 
 export enum Role {
   USER = 'USER',
@@ -11,9 +11,6 @@ export enum Role {
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
-
-  @Column()
-  name: string;
 
   @Column({ unique: true })
   email: string;
@@ -27,4 +24,7 @@ export class User {
     default: Role.USER,
   })
   role: Role;
+
+  @OneToOne(() => Technician, (technician) => technician.user)
+  technicianProfile?: Technician;
 }
