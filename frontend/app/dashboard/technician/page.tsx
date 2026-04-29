@@ -3,47 +3,40 @@
 import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
 
+type Booking = { id: number; status: string };
+
 export default function TechnicianDashboard() {
-  const [bookings, setBookings] = useState([]);
+  const [bookings, setBookings] = useState<Booking[]>([]);
 
   useEffect(() => {
     api('/bookings/my').then(setBookings);
   }, []);
 
-  const accept = (id: number) => {
-    api(`/bookings/${id}/accept`, { method: 'PATCH' });
+  const accept = async (id: number) => {
+    await api(`/bookings/${id}/accept`, { method: 'PATCH' });
+    setBookings((prev) => prev.map((b) => (b.id === id ? { ...b, status: 'accepted' } : b)));
   };
 
-  const complete = (id: number) => {
-    api(`/bookings/${id}/complete`, { method: 'PATCH' });
+  const complete = async (id: number) => {
+    await api(`/bookings/${id}/complete`, { method: 'PATCH' });
+    setBookings((prev) => prev.map((b) => (b.id === id ? { ...b, status: 'completed' } : b)));
   };
 
   return (
-    <div>
-      <h1 className="text-2xl mb-4">Technician Dashboard</h1>
-
-      {bookings.map((b: any) => (
-        <div key={b.id} className="border p-4 mb-2">
-          <p>Status: {b.status}</p>
-
-          {b.status === 'pending' && (
-            <button
-              onClick={() => accept(b.id)}
-              className="bg-green-500 text-white p-2 mr-2"
-            >
-              Accept
-            </button>
-          )}
-
-          {b.status === 'accepted' && (
-            <button
-              onClick={() => complete(b.id)}
-              className="bg-purple-500 text-white p-2"
-            >
-              Complete
-            </button>
-          )}
-        </div>
+    <div className="space-y-4">
+      <h1 className="text-2xl font-bold text-slate-900">Technician Dashboard</h1>
+      {bookings.map((b) => (
+        <article key={b.id} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <p className="text-slate-700">Booking status: <span className="font-semibold capitalize">{b.status}</span></p>
+          <div className="mt-3 flex gap-2">
+            {b.status === 'pending' && (
+              <button onClick={() => accept(b.id)} className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-500">Accept</button>
+            )}
+            {b.status === 'accepted' && (
+              <button onClick={() => complete(b.id)} className="rounded-lg bg-violet-600 px-4 py-2 text-sm font-semibold text-white hover:bg-violet-500">Complete</button>
+            )}
+          </div>
+        </article>
       ))}
     </div>
   );
