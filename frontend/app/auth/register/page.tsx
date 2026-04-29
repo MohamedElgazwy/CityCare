@@ -59,7 +59,7 @@ export default function RegisterPage() {
       if (res.user.role === 'ADMIN') {
         router.push('/dashboard/admin');
       } else if (res.user.role === 'TECHNICIAN') {
-        router.push('/dashboard/technician');
+        router.push('/profile');
       } else {
         router.push('/services');
       }
