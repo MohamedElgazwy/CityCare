@@ -30,6 +30,13 @@ export class TechniciansController {
     return this.techService.findAllApproved();
   }
 
+  @Get('admin/all')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  getAllForAdmin() {
+    return this.techService.findAllForAdmin();
+  }
+
   @Get('search')
   search(@Query() query: any) {
     return this.techService.search(query);
