@@ -13,6 +13,7 @@ export default function RegisterPage() {
     name: '',
     email: '',
     password: '',
+    role: 'USER',
   });
 
   const [loading, setLoading] = useState(false);
@@ -97,6 +98,16 @@ export default function RegisterPage() {
             onChange={(e) => setForm({ ...form, password: e.target.value })}
             className="w-full border p-2 rounded"
           />
+
+          <select
+            value={form.role}
+            onChange={(e) => setForm({ ...form, role: e.target.value })}
+            className="w-full border p-2 rounded bg-white"
+          >
+            <option value="USER">User</option>
+            <option value="TECHNICIAN">Technician</option>
+            <option value="ADMIN">Admin</option>
+          </select>
 
           
 
