@@ -8,6 +8,7 @@ import { TestController } from './test/test.controller';
 import { TechniciansModule } from './technicians/technicians.module';
 import { CategoriesModule } from './categories/categories.module';
 import { BookingsModule } from './bookings/bookings.module';
+import { ReviewsModule } from './reviews/reviews.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { BookingsModule } from './bookings/bookings.module';
     TechniciansModule,
     CategoriesModule,
     BookingsModule,
+    ReviewsModule,
   ],
   controllers: [AppController, TestController],
   providers: [AppService],
