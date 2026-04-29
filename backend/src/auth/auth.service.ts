@@ -26,7 +26,7 @@ export class AuthService {
       name: data.name,
       email: data.email,
       password: hashedPassword,
-      role: Role.USER,
+      role: data.role ?? Role.USER,
     });
 
     return this.generateToken(user);
