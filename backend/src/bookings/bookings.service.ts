@@ -39,17 +39,24 @@ export class BookingsService {
   }
 
   // 🔧 technician يقبل
-  async accept(id: number) {
-    const booking = await this.bookingRepo.findOne({ where: { id } });
+ async accept(id: number, techId: number) {
+  const booking = await this.bookingRepo.findOne({
+    where: { id },
+    relations: ['technician'],
+  });
 
-    if (!booking) throw new NotFoundException();
+  if (!booking) throw new NotFoundException();
 
-    booking.status = BookingStatus.ACCEPTED;
-    return this.bookingRepo.save(booking);
+  if (booking.technician.id !== techId) {
+    throw new BadRequestException('Not your booking');
   }
 
+  booking.status = BookingStatus.ACCEPTED;
+  return this.bookingRepo.save(booking);
+}
+
   // ✅ complete
-  async complete(id: number) {
+  async complete(id: number, userId: number) {
     const booking = await this.bookingRepo.findOne({ where: { id } });
 
     if (!booking) throw new NotFoundException();
@@ -57,4 +64,13 @@ export class BookingsService {
     booking.status = BookingStatus.COMPLETED;
     return this.bookingRepo.save(booking);
   }
+
+  getMyBookings(userId: number) {
+  return this.bookingRepo.find({
+    where: {
+      technician: { id: userId },
+    },
+    relations: ['user', 'technician'],
+  });
+}
 }

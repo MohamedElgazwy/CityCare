@@ -1,4 +1,4 @@
-import { Controller, Param, Patch, Post, Req, UseGuards } from "@nestjs/common";
+import { Controller, Get, Param, Patch, Post, Req, UseGuards } from "@nestjs/common";
 import { BookingsService } from "./bookings.service";
 import { JwtAuthGuard } from "src/auth/strategies/jwt-auth.guard";
 import { RolesGuard } from "src/common/guards/roles.guard";
@@ -20,15 +20,23 @@ export class BookingsController {
   @Patch(':id/accept')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('TECHNICIAN')
-  accept(@Param('id') id: number) {
-    return this.service.accept(id);
+  accept(@Param('id') id: number, @Req() req) {
+    return this.service.accept(id, req.user.sub);
   }
 
   // ✅ complete
   @Patch(':id/complete')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('TECHNICIAN')
-  complete(@Param('id') id: number) {
-    return this.service.complete(id);
+  complete(@Param('id') id: number, @Req() req) {
+    return this.service.complete(id, req.user.sub);
   }
+
+  @Get('my')
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles('TECHNICIAN')
+getMyBookings(@Req() req) {
+  return this.service.getMyBookings(req.user.sub);
+}
+
 }
