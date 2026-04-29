@@ -16,10 +16,10 @@ export class UsersService {
   }
 
   findByEmail(email: string) {
-    return this.repo.findOne({ where: { email } });
+    return this.repo.findOne({ where: { email }, relations: ['technicianProfile'] });
   }
 
   findById(id: number) {
-    return this.repo.findOne({ where: { id } });
+    return this.repo.findOne({ where: { id }, relations: ['technicianProfile'] });
   }
 }

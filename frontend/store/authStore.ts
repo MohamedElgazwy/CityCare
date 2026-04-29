@@ -4,6 +4,8 @@ type AuthUser = {
   id: number;
   email: string;
   role: 'USER' | 'TECHNICIAN' | 'ADMIN';
+  name?: string;
+  photoUrl?: string | null;
 };
 
 type AuthState = {
