@@ -11,6 +11,7 @@ export default function LoginPage() {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [role, setRole] = useState('USER');
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -21,13 +22,13 @@ export default function LoginPage() {
 
     try {
       // ✅ validation
-      if (!email || !password) {
+      if (!email || !password || !role) {
         throw new Error('Email and password are required');
       }
 
       const res = await api('/auth/login', {
         method: 'POST',
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, role }),
       });
 
       if (!res.access_token) {
@@ -75,6 +76,16 @@ export default function LoginPage() {
             onChange={(e) => setPassword(e.target.value)}
             className="w-full border p-2 rounded"
           />
+
+          <select
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
+            className="w-full border p-2 rounded bg-white"
+          >
+            <option value="USER">User</option>
+            <option value="TECHNICIAN">Technician</option>
+            <option value="ADMIN">Admin</option>
+          </select>
 
           {error && (
             <p className="text-red-500 text-sm">{error}</p>

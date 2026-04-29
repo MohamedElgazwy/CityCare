@@ -1,6 +1,19 @@
 import { create } from 'zustand';
 
-export const useAuthStore = create((set) => ({
+type AuthUser = {
+  id: number;
+  email: string;
+  role: 'USER' | 'TECHNICIAN' | 'ADMIN';
+};
+
+type AuthState = {
+  user: AuthUser | null;
+  token: string | null;
+  setAuth: (user: AuthUser, token: string) => void;
+  logout: () => void;
+};
+
+export const useAuthStore = create<AuthState>((set) => ({
   user: null,
   token: null,
 
