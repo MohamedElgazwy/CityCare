@@ -2,8 +2,10 @@ import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
 import * as bcrypt from 'bcrypt';
+import { LoginDto } from './dto/login.dto';
+import { RegisterDto } from './dto/register.dto';
+import { User } from 'src/users/user.entity';
 
-// src/auth/auth.service.ts
 @Injectable()
 export class AuthService {
   constructor(
@@ -11,7 +13,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async register(data: any) {
+  async register(data: RegisterDto) {
     const existingUser = await this.usersService.findByEmail(data.email);
 
     if (existingUser) {
@@ -28,7 +30,7 @@ export class AuthService {
     return this.generateToken(user);
   }
 
-  async login(data: any) {
+  async login(data: LoginDto) {
     const user = await this.usersService.findByEmail(data.email);
 
     if (!user) {
@@ -44,22 +46,20 @@ export class AuthService {
     return this.generateToken(user);
   }
 
-  private generateToken(user: any) {
-  const payload = {
-    sub: user.id,
-    email: user.email,
-    role: user.role, 
-  };
-
-  return {
-    access_token: this.jwtService.sign(payload),
-
-
-    user: {
-      id: user.id,
+  private generateToken(user: User) {
+    const payload = {
+      userId: user.id,
       email: user.email,
       role: user.role,
-    },
-  };
-}
+    };
+
+    return {
+      access_token: this.jwtService.sign(payload),
+      user: {
+        id: user.id,
+        email: user.email,
+        role: user.role,
+      },
+    };
+  }
 }
