@@ -3,19 +3,22 @@
 import { useState } from 'react';
 import { api } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
+import { useRouter } from 'next/navigation';
+
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
   const setAuth = useAuthStore((s) => s.setAuth);
+  const router = useRouter();
 
   const handleLogin = async () => {
     const res = await api('/auth/login', {
       method: 'POST',
       body: JSON.stringify({ email, password }),
     });
-
+  localStorage.setItem('token', res.access_token);
+  router.push('/services');
     setAuth(res.user, res.access_token);
   };
 
