@@ -41,4 +41,9 @@ export class TechniciansController {
   search(@Query() query: any) {
     return this.techService.search(query);
   }
+
+  @Get(':id')
+  getOne(@Param('id', ParseIntPipe) id: number) {
+    return this.techService.findOneWithReviews(id);
+  }
 }

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { api } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
 import { useRouter } from 'next/navigation';
+import ReviewForm from '@/components/review/ReviewForm';
 
 type Booking = { id: number; status: string; date: string; technician: { name: string } };
 type UserDetails = { id: number; email: string; name?: string; photoUrl?: string | null; role: string; technicianProfile?: { id: number; isApproved: boolean; } | null };
@@ -14,6 +15,7 @@ export default function ProfilePage() {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [details, setDetails] = useState<UserDetails | null>(null);
   const [loading, setLoading] = useState(true);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => { hydrate(); }, [hydrate]);
 
@@ -72,6 +74,16 @@ export default function ProfilePage() {
                       </div>
                       <div className="text-sm font-semibold">{b.status}</div>
                     </div>
+                    {b.status === 'completed' && (
+                      <div className="mt-3">
+                        <p className="text-sm muted">Leave a review for this booking</p>
+                        <ReviewForm bookingId={b.id} onSuccess={async () => {
+                          // refresh bookings list
+                          const list = await api('/bookings/me');
+                          if (Array.isArray(list)) setBookings(list);
+                        }} />
+                      </div>
+                    )}
                   </li>
                 ))}
               </ul>

@@ -77,7 +77,8 @@ export default function ServicesPage() {
                 <span>Price: ${t.price}</span>
                 <span>⭐ {t.rating}</span>
               </div>
-              <button
+              <div className="mt-4 flex gap-2">
+                <button
                 onClick={async () => {
                   try {
                     await api('/bookings', { method: 'POST', body: JSON.stringify({ technicianId: t.id }) });
@@ -90,6 +91,8 @@ export default function ServicesPage() {
               >
                 Book Now
               </button>
+                <button onClick={() => router.push(`/technicians/${t.id}`)} className="mt-4 rounded-lg border px-4 py-2 text-sm font-semibold">View profile</button>
+              </div>
             </article>
           ))}
         </div>
