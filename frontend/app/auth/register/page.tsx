@@ -55,11 +55,12 @@ export default function RegisterPage() {
       localStorage.setItem('token', res.access_token);
       setAuth(res.user, res.access_token);
 
+
       // ✅ redirect
       if (res.user.role === 'ADMIN') {
         router.push('/dashboard/admin');
       } else if (res.user.role === 'TECHNICIAN') {
-        router.push('/dashboard/technician');
+        router.push('/profile');
       } else {
         router.push('/services');
       }

@@ -49,8 +49,8 @@ export default function ServicesPage() {
   return (
     <main className="min-h-screen bg-slate-50 px-6 py-8 lg:px-8">
       <div className="mx-auto max-w-7xl">
-        <h1 className="text-3xl font-bold text-slate-900">Find a service</h1>
-        <p className="mt-2 text-slate-600">Filter by specialty, budget, and rating to hire the right technician.</p>
+        <h1 className="text-3xl font-bold" style={{ color: 'var(--accent)' }}>Find a service</h1>
+        <p className="mt-2 muted">Filter by specialty, budget, and rating to hire the right technician.</p>
 
         <div className="mt-6 grid gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm md:grid-cols-5">
           <input placeholder="Search by name" onChange={(e) => setName(e.target.value)} className="rounded-lg border border-slate-300 px-3 py-2" />

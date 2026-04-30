@@ -43,7 +43,7 @@ export default function ProfilePage() {
             <img src={details?.photoUrl || user.photoUrl || '/placeholder-avatar.png'} alt="avatar" className="h-20 w-20 rounded-full object-cover" style={{ border: '3px solid var(--accent)' }} />
             <div>
               <h1 className="text-2xl font-bold" style={{ color: 'var(--accent)' }}>{details?.name || user.name || user.email}</h1>
-              <p className="text-sm text-slate-600">{details?.email || user.email}</p>
+              <p className="text-sm muted">{details?.email || user.email}</p>
               {details?.technicianProfile ? (
                 <p className="mt-1 text-sm">
                   Technician application status: <strong>{details.technicianProfile.isApproved ? 'Approved' : 'Pending'}</strong>
