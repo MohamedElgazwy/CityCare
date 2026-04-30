@@ -1,4 +1,5 @@
 import { Repository } from 'typeorm';
+import { Review } from 'src/reviews/review.entity';
 import { Technician } from './technician.entity';
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -18,6 +19,23 @@ export class TechniciansService {
     @InjectRepository(User)
     private userRepo: Repository<User>,
   ) {}
+
+  async findOneWithReviews(id: number) {
+    const tech = await this.repo.findOne({ where: { id }, relations: ['category', 'user'] });
+    if (!tech) throw new NotFoundException('Technician not found');
+
+    const reviews = await this.repo.manager
+      .getRepository(Review)
+      .createQueryBuilder('review')
+      .leftJoinAndSelect('review.booking', 'booking')
+      .leftJoinAndSelect('booking.user', 'user')
+      .leftJoin('booking.technician', 'tech')
+      .where('tech.id = :id', { id })
+      .orderBy('review.id', 'DESC')
+      .getMany();
+
+    return { ...tech, reviews };
+  }
 
   async create(data: CreateTechnicianDto, userId: number) {
     const category = await this.categoryRepo.findOne({ where: { id: data.categoryId } });
