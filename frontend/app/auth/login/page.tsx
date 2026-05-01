@@ -22,7 +22,7 @@ export default function LoginPage() {
     try {
       // ✅ validation
       if (!email || !password) {
-        throw new Error('Email and password are required');
+        throw new Error('البريد الإلكتروني وكلمة المرور مطلوبان');
       }
 
       const res = await api('/auth/login', {
@@ -31,7 +31,7 @@ export default function LoginPage() {
       });
 
       if (!res.access_token) {
-        throw new Error(res.message || 'Invalid credentials');
+        throw new Error(res.message || 'بيانات الدخول غير صحيحة');
       }
 
       // ✅ حفظ التوكن
@@ -48,7 +48,7 @@ export default function LoginPage() {
       }
 
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Something went wrong');
+      setError(err instanceof Error ? err.message : 'حدث خطأ ما');
     } finally {
       setLoading(false);
     }
@@ -57,21 +57,21 @@ export default function LoginPage() {
   return (
     <main className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-slate-50 px-6">
       <section className="w-full max-w-md rounded-2xl border bg-white p-8 shadow-sm">
-        <h1 className="text-2xl font-bold">Welcome back</h1>
+        <h1 className="text-2xl font-bold">مرحبًا بعودتك</h1>
         <p className="text-sm text-gray-500 mt-1">
-          Login to manage your services
+          سجّل الدخول لإدارة خدماتك
         </p>
 
         <div className="mt-6 space-y-3">
           <input
-            placeholder="Email"
+            placeholder="البريد الإلكتروني"
             onChange={(e) => setEmail(e.target.value)}
             className="w-full border p-2 rounded"
           />
 
           <input
             type="password"
-            placeholder="Password"
+            placeholder="كلمة المرور"
             onChange={(e) => setPassword(e.target.value)}
             className="w-full border p-2 rounded"
           />
@@ -87,7 +87,7 @@ export default function LoginPage() {
             disabled={loading}
             className="w-full bg-black text-white p-2 rounded hover:bg-gray-800"
           >
-            {loading ? 'Logging in...' : 'Login'}
+            {loading ? 'جارٍ تسجيل الدخول...' : 'تسجيل الدخول'}
           </button>
         </div>
       </section>

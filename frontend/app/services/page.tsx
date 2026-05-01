@@ -44,26 +44,26 @@ export default function ServicesPage() {
     setIsLoading(false);
   };
 
-  if (!hydrated || !user) return <p className="p-6">Loading...</p>;
+  if (!hydrated || !user) return <p className="p-6">جارٍ التحميل...</p>;
 
   return (
     <main className="min-h-screen bg-slate-50 px-6 py-8 lg:px-8">
       <div className="mx-auto max-w-7xl">
-        <h1 className="text-3xl font-bold" style={{ color: 'var(--accent)' }}>Find a service</h1>
-        <p className="mt-2 muted">Filter by specialty, budget, and rating to hire the right technician.</p>
+        <h1 className="text-3xl font-bold" style={{ color: 'var(--accent)' }}>ابحث عن خدمة</h1>
+        <p className="mt-2 muted">صفِّ النتائج حسب التخصص والميزانية والتقييم لاختيار الفنّي المناسب.</p>
 
         <div className="mt-6 grid gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm md:grid-cols-5">
-          <input placeholder="Search by name" onChange={(e) => setName(e.target.value)} className="rounded-lg border border-slate-300 px-3 py-2" />
+          <input placeholder="ابحث بالاسم" onChange={(e) => setName(e.target.value)} className="rounded-lg border border-slate-300 px-3 py-2" />
           <select onChange={(e) => setCategoryId(e.target.value)} className="rounded-lg border border-slate-300 px-3 py-2">
-            <option value="">All Categories</option>
+            <option value="">كل الأقسام</option>
             {categories.map((c) => (
               <option key={c.id} value={c.id}>{c.name}</option>
             ))}
           </select>
-          <input placeholder="Min price" type="number" onChange={(e) => setMinPrice(e.target.value)} className="rounded-lg border border-slate-300 px-3 py-2" />
-          <input placeholder="Min rating" type="number" onChange={(e) => setRating(e.target.value)} className="rounded-lg border border-slate-300 px-3 py-2" />
+          <input placeholder="أقل سعر" type="number" onChange={(e) => setMinPrice(e.target.value)} className="rounded-lg border border-slate-300 px-3 py-2" />
+          <input placeholder="أقل تقييم" type="number" onChange={(e) => setRating(e.target.value)} className="rounded-lg border border-slate-300 px-3 py-2" />
           <button onClick={search} className="rounded-lg bg-slate-900 px-4 py-2 font-semibold text-white hover:bg-slate-700">
-            {isLoading ? 'Searching...' : 'Search'}
+            {isLoading ? 'جارٍ البحث...' : 'بحث'}
           </button>
         </div>
 
@@ -71,10 +71,10 @@ export default function ServicesPage() {
           {techs.map((t) => (
             <article key={t.id} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
               <h2 className="text-xl font-semibold text-slate-900">{t.name}</h2>
-              {t.photoUrl && <img src={t.photoUrl} alt={`${t.name} profile`} className="mt-3 h-16 w-16 rounded-full object-cover" />}
+              {t.photoUrl && <img src={t.photoUrl} alt={`${t.name} الملف الشخصي`} className="mt-3 h-16 w-16 rounded-full object-cover" />}
               <p className="mt-2 text-slate-600">{t.description}</p>
               <div className="mt-4 flex items-center justify-between text-sm text-slate-700">
-                <span>Price: ${t.price}</span>
+                <span>السعر: ${t.price}</span>
                 <span>⭐ {t.rating}</span>
               </div>
               <div className="mt-4 flex gap-2">
@@ -82,16 +82,16 @@ export default function ServicesPage() {
                 onClick={async () => {
                   try {
                     await api('/bookings', { method: 'POST', body: JSON.stringify({ technicianId: t.id }) });
-                    alert('Booking request sent successfully!');
+                    alert('تم إرسال طلب الحجز بنجاح!');
                   } catch (err) {
-                    alert('Failed to book technician. Please try again.');
+                    alert('فشل حجز الفنّي. يرجى المحاولة مرة أخرى.');
                   }
                 }}
                 className="mt-4 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-500"
               >
-                Book Now
+                احجز الآن
               </button>
-                <button onClick={() => router.push(`/technicians/${t.id}`)} className="mt-4 rounded-lg border px-4 py-2 text-sm font-semibold">View profile</button>
+                <button onClick={() => router.push(`/technicians/${t.id}`)} className="mt-4 rounded-lg border px-4 py-2 text-sm font-semibold">عرض الملف الشخصي</button>
               </div>
             </article>
           ))}
