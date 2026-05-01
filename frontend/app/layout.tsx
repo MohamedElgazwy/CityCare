@@ -3,7 +3,7 @@ import './globals.css';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="ar" dir="rtl">
       <body className="antialiased page-container">
         <Navbar />
         {children}

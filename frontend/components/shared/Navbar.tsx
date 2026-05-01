@@ -6,9 +6,9 @@ import { useEffect } from 'react';
 import { useAuthStore } from '@/store/authStore';
 
 const defaultNav = [
-  { href: '/', label: 'Home' },
-  { href: '/services', label: 'Services' },
-  { href: '/dashboard/technician', label: 'Dashboard' },
+  { href: '/', label: 'الرئيسية' },
+  { href: '/services', label: 'الخدمات' },
+  { href: '/dashboard/technician', label: 'لوحة التحكم' },
 ];
 
 export default function Navbar() {
@@ -53,16 +53,16 @@ export default function Navbar() {
             <>
               <Link href="/profile" className="rounded-full px-3 py-1 text-sm text-slate-700 hover:bg-slate-100">
                 <div className="flex items-center gap-2">
-                  <img src={user.photoUrl || '/placeholder-avatar.png'} alt="avatar" className="h-8 w-8 rounded-full object-cover border" style={{ borderColor: 'var(--accent)' }} />
+                  <img src={user.photoUrl || '/placeholder-avatar.png'} alt="الصورة الشخصية" className="h-8 w-8 rounded-full object-cover border" style={{ borderColor: 'var(--accent)' }} />
                   <span style={{ color: 'var(--accent)' }}>{user.name || user.email}</span>
                 </div>
               </Link>
               <button onClick={() => { logout(); router.push('/'); }} className="rounded-full px-4 py-2 text-sm text-slate-600 hover:bg-slate-100" style={{ borderColor: 'var(--accent)' }}>
-                Logout
+                تسجيل الخروج
               </button>
             </>
           ) : (
-            <Link href="/auth/login" className="rounded-full px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900">Login</Link>
+            <Link href="/auth/login" className="rounded-full px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900">تسجيل الدخول</Link>
           )}
         </div>
       </nav>

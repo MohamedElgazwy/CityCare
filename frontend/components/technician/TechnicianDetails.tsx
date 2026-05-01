@@ -41,8 +41,8 @@ export default function TechnicianDetails({ id }: { id: number }) {
     };
   }, [id]);
 
-  if (loading) return <p className="p-6">Loading...</p>;
-  if (!tech) return <p className="p-6">Technician not found.</p>;
+  if (loading) return <p className="p-6">جارٍ التحميل...</p>;
+  if (!tech) return <p className="p-6">لم يتم العثور على الفنّي.</p>;
 
   const photo = tech.photoUrl || tech.photo;
 
@@ -81,7 +81,7 @@ export default function TechnicianDetails({ id }: { id: number }) {
               </h1>
 
               <p className="text-sm text-slate-500 mt-1">
-                {tech.category?.name || "General Technician"}
+                {tech.category?.name || "فنّي عام"}
               </p>
 
               <p className="mt-4 text-slate-600 leading-relaxed">
@@ -115,26 +115,26 @@ export default function TechnicianDetails({ id }: { id: number }) {
                       method: "POST",
                       body: JSON.stringify({ technicianId: tech.id }),
                     });
-                    alert("Booking request sent successfully!");
+                    alert("تم إرسال طلب الحجز بنجاح!");
                   } catch {
-                    alert("Failed to book technician.");
+                    alert("فشل حجز الفنّي.");
                   }
                 }}
               >
-                Book Now
+                احجز الآن
               </Button>
             </div>
           </div>
         </div>
 
-        {/* ===== Reviews Section ===== */}
+        {/* ===== التقييمات Section ===== */}
         <div className="bg-white p-6 rounded-2xl shadow-sm border">
           <h2 className="text-xl font-semibold text-slate-800">
-            Reviews
+            التقييمات
           </h2>
 
           {!tech.reviews || tech.reviews.length === 0 ? (
-            <p className="mt-4 text-slate-500">No reviews yet.</p>
+            <p className="mt-4 text-slate-500">لا توجد تقييمات بعد.</p>
           ) : (
             <div className="mt-4 space-y-4">
               {tech.reviews.map((r) => (
@@ -144,7 +144,7 @@ export default function TechnicianDetails({ id }: { id: number }) {
                 >
                   <div>
                     <p className="font-medium text-slate-700">
-                      {r.booking?.user?.email || `User`}
+                      {r.booking?.user?.email || `مستخدم`}
                     </p>
                     <p className="text-sm text-slate-500 mt-1">
                       {r.comment}

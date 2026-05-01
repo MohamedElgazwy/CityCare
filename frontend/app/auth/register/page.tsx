@@ -26,11 +26,11 @@ export default function RegisterPage() {
     try {
       // ✅ validation
       if (!form.name || !form.email || !form.password) {
-        throw new Error('All fields are required');
+        throw new Error('جميع الحقول مطلوبة');
       }
 
       if (form.password.length < 6) {
-        throw new Error('Password must be at least 6 characters');
+        throw new Error('يجب أن تكون كلمة المرور 6 أحرف على الأقل');
       }
 
       // ✅ register
@@ -49,7 +49,7 @@ export default function RegisterPage() {
       });
 
       if (!res.access_token) {
-        throw new Error('Login after register failed');
+        throw new Error('فشل تسجيل الدخول بعد إنشاء الحساب');
       }
 
       localStorage.setItem('token', res.access_token);
@@ -66,7 +66,7 @@ export default function RegisterPage() {
       }
 
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Something went wrong');
+      setError(err instanceof Error ? err.message : 'حدث خطأ ما');
     } finally {
       setLoading(false);
     }
@@ -75,27 +75,27 @@ export default function RegisterPage() {
   return (
     <main className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-slate-50 px-6">
       <section className="w-full max-w-md rounded-2xl border bg-white p-8 shadow-sm">
-        <h1 className="text-2xl font-bold">Create account</h1>
+        <h1 className="text-2xl font-bold">إنشاء حساب</h1>
         <p className="text-sm text-gray-500 mt-1">
-          Join CityCare and start booking services
+          انضم إلى CityCare وابدأ حجز الخدمات
         </p>
 
         <div className="mt-6 space-y-3">
           <input
-            placeholder="Name"
+            placeholder="الاسم"
             onChange={(e) => setForm({ ...form, name: e.target.value })}
             className="w-full border p-2 rounded"
           />
 
           <input
-            placeholder="Email"
+            placeholder="البريد الإلكتروني"
             onChange={(e) => setForm({ ...form, email: e.target.value })}
             className="w-full border p-2 rounded"
           />
 
           <input
             type="password"
-            placeholder="Password"
+            placeholder="كلمة المرور"
             onChange={(e) => setForm({ ...form, password: e.target.value })}
             className="w-full border p-2 rounded"
           />
@@ -105,9 +105,9 @@ export default function RegisterPage() {
             onChange={(e) => setForm({ ...form, role: e.target.value })}
             className="w-full border p-2 rounded bg-white"
           >
-            <option value="USER">User</option>
-            <option value="TECHNICIAN">Technician</option>
-            <option value="ADMIN">Admin</option>
+            <option value="USER">مستخدم</option>
+            <option value="TECHNICIAN">فنّي</option>
+            <option value="ADMIN">مدير</option>
           </select>
 
           
@@ -121,7 +121,7 @@ export default function RegisterPage() {
             disabled={loading}
             className="w-full bg-black text-white p-2 rounded hover:bg-gray-800"
           >
-            {loading ? 'Creating account...' : 'Register'}
+            {loading ? 'جارٍ إنشاء الحساب...' : 'تسجيل'}
           </button>
         </div>
       </section>

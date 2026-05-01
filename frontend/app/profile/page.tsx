@@ -35,48 +35,48 @@ export default function ProfilePage() {
       .finally(() => setLoading(false));
   }, [hydrated, router, user]);
 
-  if (!hydrated || !user) return <p className="p-6">Loading...</p>;
+  if (!hydrated || !user) return <p className="p-6">جارٍ التحميل...</p>;
 
   return (
     <main className="min-h-screen bg-slate-50 px-6 py-8 lg:px-8">
       <div className="mx-auto max-w-3xl">
         <div className="rounded-2xl border theme-card p-6 shadow-sm" style={{ borderColor: 'var(--accent)' }}>
           <div className="flex items-center gap-4">
-            <img src={details?.photoUrl || user.photoUrl || '/placeholder-avatar.png'} alt="avatar" className="h-20 w-20 rounded-full object-cover" style={{ border: '3px solid var(--accent)' }} />
+            <img src={details?.photoUrl || user.photoUrl || '/placeholder-avatar.png'} alt="الصورة الشخصية" className="h-20 w-20 rounded-full object-cover" style={{ border: '3px solid var(--accent)' }} />
             <div>
               <h1 className="text-2xl font-bold" style={{ color: 'var(--accent)' }}>{details?.name || user.name || user.email}</h1>
               <p className="text-sm muted">{details?.email || user.email}</p>
               {details?.technicianProfile ? (
                 <p className="mt-1 text-sm">
-                  Technician application status: <strong>{details.technicianProfile.isApproved ? 'Approved' : 'Pending'}</strong>
+                  حالة طلب الفنّي: <strong>{details.technicianProfile.isApproved ? 'مقبول' : 'قيد المراجعة'}</strong>
                 </p>
               ) : (
-                <p className="mt-1 text-sm">No technician application submitted.</p>
+                <p className="mt-1 text-sm">لم يتم تقديم طلب فنّي.</p>
               )}
             </div>
           </div>
 
           <section className="mt-6">
-            <h2 className="text-lg font-semibold">Booking History</h2>
+            <h2 className="text-lg font-semibold">سجل الحجوزات</h2>
             {loading ? (
-              <p className="p-4">Loading...</p>
+              <p className="p-4">جارٍ التحميل...</p>
             ) : bookings.length === 0 ? (
-              <p className="p-4">You have no bookings yet.</p>
+              <p className="p-4">لا توجد لديك حجوزات بعد.</p>
             ) : (
               <ul className="mt-4 space-y-3">
                 {bookings.map((b) => (
                   <li key={b.id} className="rounded border p-3 bg-white">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="font-medium">Booking #{b.id}</p>
-                        <p className="text-sm text-slate-600">Technician: {b.technician?.name || '—'}</p>
-                        <p className="text-sm text-slate-600">Date: {new Date(b.date).toLocaleString()}</p>
+                        <p className="font-medium">الحجز #{b.id}</p>
+                        <p className="text-sm text-slate-600">الفنّي: {b.technician?.name || '—'}</p>
+                        <p className="text-sm text-slate-600">التاريخ: {new Date(b.date).toLocaleString()}</p>
                       </div>
                       <div className="text-sm font-semibold">{b.status}</div>
                     </div>
                     {b.status === 'completed' && (
                       <div className="mt-3">
-                        <p className="text-sm muted">Leave a review for this booking</p>
+                        <p className="text-sm muted">اترك تقييمًا لهذا الحجز</p>
                         <ReviewForm bookingId={b.id} onSuccess={async () => {
                           // refresh bookings list
                           const list = await api('/bookings/me');
