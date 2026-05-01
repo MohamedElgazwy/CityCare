@@ -49,7 +49,7 @@ export default function TechnicianDashboard() {
         const cats = await api('/categories');
         if (Array.isArray(cats)) setCategories(cats);
       } catch (err) {
-        console.error('Failed to fetch data', err);
+        console.error('فشل جلب البيانات', err);
       } finally {
         setLoading(false);
       }
@@ -63,10 +63,10 @@ export default function TechnicianDashboard() {
       await api(`/bookings/${id}/${endpoint}`, { method: 'PATCH' });
       setBookings((prev) => prev.map((b) => (b.id === id ? { ...b, status: nextStatus } : b)));
       if (endpoint === 'accept') {
-        alert('Booking accepted! The user will be notified.');
+        alert('تم قبول الحجز! سيتم إشعار المستخدم.');
       }
     } catch (err) {
-      alert('Failed to update booking status.');
+      alert('فشل تحديث حالة الحجز.');
     }
   };
 
@@ -84,7 +84,7 @@ export default function TechnicianDashboard() {
     setMessage('');
 
     if (!form.name || !form.phone || !form.description || !form.price || !form.categoryId || !form.photoUrl) {
-      setError('All profile application fields are required, including photo.');
+      setError('جميع حقول طلب الملف الشخصي مطلوبة بما فيها الصورة.');
       return;
     }
 
@@ -103,45 +103,45 @@ export default function TechnicianDashboard() {
         throw new Error(Array.isArray(res.message) ? res.message.join(', ') : res.message);
       }
 
-      setMessage('Application submitted successfully. Admin approval is required.');
+      setMessage('تم إرسال الطلب بنجاح. يلزم موافقة المدير.');
       setForm({ name: '', phone: '', description: '', price: '', categoryId: '', photoUrl: '' });
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Failed to submit application');
+      setError(err instanceof Error ? err.message : 'فشل إرسال الطلب');
     } finally {
       setSubmitting(false);
     }
   };
 
-  if (!hydrated || !user || loading) return <p>Loading...</p>;
+  if (!hydrated || !user || loading) return <p>جارٍ التحميل...</p>;
 
   if (user.role !== 'TECHNICIAN') {
     return (
       <Card className="space-y-4">
-        <h1 className="heading-2" style={{ color: 'var(--accent)' }}>Technician Profile Application</h1>
-        <p className="muted">Submit your profile to become a technician.</p>
+        <h1 className="heading-2" style={{ color: 'var(--accent)' }}>طلب ملف فنّي</h1>
+        <p className="muted">قدّم ملفك لتصبح فنّيًا.</p>
 
-        <input value={form.name} onChange={(e) => setForm((prev) => ({ ...prev, name: e.target.value }))} placeholder="Full name" className="w-full rounded border p-2" />
-        <input value={form.phone} onChange={(e) => setForm((prev) => ({ ...prev, phone: e.target.value }))} placeholder="Phone" className="w-full rounded border p-2" />
-        <textarea value={form.description} onChange={(e) => setForm((prev) => ({ ...prev, description: e.target.value }))} placeholder="Description" className="w-full rounded border p-2" />
-        <input type="number" value={form.price} onChange={(e) => setForm((prev) => ({ ...prev, price: e.target.value }))} placeholder="Service price" className="w-full rounded border p-2" />
+        <input value={form.name} onChange={(e) => setForm((prev) => ({ ...prev, name: e.target.value }))} placeholder="الاسم الكامل" className="w-full rounded border p-2" />
+        <input value={form.phone} onChange={(e) => setForm((prev) => ({ ...prev, phone: e.target.value }))} placeholder="الهاتف" className="w-full rounded border p-2" />
+        <textarea value={form.description} onChange={(e) => setForm((prev) => ({ ...prev, description: e.target.value }))} placeholder="الوصف" className="w-full rounded border p-2" />
+        <input type="number" value={form.price} onChange={(e) => setForm((prev) => ({ ...prev, price: e.target.value }))} placeholder="سعر الخدمة" className="w-full rounded border p-2" />
         <select value={form.categoryId} onChange={(e) => setForm((prev) => ({ ...prev, categoryId: e.target.value }))} className="w-full rounded border p-2 bg-white">
-          <option value="">Select category</option>
+          <option value="">اختر القسم</option>
           {categories.map((c) => (
             <option key={c.id} value={c.id}>{c.name}</option>
           ))}
         </select>
 
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-slate-700">Profile photo (required)</label>
+          <label className="block text-sm font-medium text-slate-700">صورة الملف الشخصي (مطلوبة)</label>
           <input type="file" accept="image/*" onChange={(e) => e.target.files?.[0] && uploadPhoto(e.target.files[0])} className="w-full rounded border p-2" />
-          {form.photoUrl && <img src={form.photoUrl} alt="Preview" className="h-24 w-24 rounded-full object-cover" />}
+          {form.photoUrl && <img src={form.photoUrl} alt="معاينة" className="h-24 w-24 rounded-full object-cover" />}
         </div>
 
         {error && <p className="text-sm text-red-500">{error}</p>}
         {message && <p className="text-sm" style={{ color: 'var(--accent)' }}>{message}</p>}
 
         <Button onClick={submitApplication} disabled={submitting} variant="primary">
-          {submitting ? 'Submitting...' : 'Submit application'}
+          {submitting ? 'جارٍ الإرسال...' : 'إرسال الطلب'}
         </Button>
       </Card>
     );
@@ -149,17 +149,17 @@ export default function TechnicianDashboard() {
 
   return (
     <div className="space-y-4">
-      <h1 className="heading-2" style={{ color: 'var(--accent)' }}>Technician Dashboard</h1>
+      <h1 className="heading-2" style={{ color: 'var(--accent)' }}>لوحة تحكم الفنّي</h1>
       {bookings.map((b) => (
         <Card key={b.id} className="rounded-2xl">
-          <p>Booking #{b.id} - {b.status}</p>
-          {b.user?.email && <p className="muted">Customer: {b.user.email}</p>}
+          <p>الحجز #{b.id} - {b.status}</p>
+          {b.user?.email && <p className="muted">العميل: {b.user.email}</p>}
           <div className="mt-3 flex gap-2">
             {b.status === 'pending' && <>
-              <Button onClick={() => updateStatus(b.id, 'accept', 'accepted')} variant="primary">Accept</Button>
-              <Button onClick={() => updateStatus(b.id, 'reject', 'rejected')} variant="secondary">Reject</Button>
+              <Button onClick={() => updateStatus(b.id, 'accept', 'accepted')} variant="primary">قبول</Button>
+              <Button onClick={() => updateStatus(b.id, 'reject', 'rejected')} variant="secondary">رفض</Button>
             </>}
-            {b.status === 'accepted' && <Button onClick={() => updateStatus(b.id, 'complete', 'completed')} variant="primary">Complete</Button>}
+            {b.status === 'accepted' && <Button onClick={() => updateStatus(b.id, 'complete', 'completed')} variant="primary">إكمال</Button>}
           </div>
         </Card>
       ))}
