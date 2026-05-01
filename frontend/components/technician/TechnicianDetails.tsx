@@ -62,7 +62,7 @@ export default function TechnicianDetails({ id }: { id: number }) {
         <div className="grid md:grid-cols-2 gap-8 bg-white p-6 rounded-2xl shadow-sm border">
 
           {/* Image */}
-          <div className="w-full h-[350px] rounded-xl overflow-hidden bg-slate-100">
+          <div className="w-full  rounded-xl overflow-hidden bg-slate-100">
             {getImageSrc() ? (
               <img
                 src={getImageSrc()!}
