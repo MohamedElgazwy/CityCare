@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-
+// This store manages authentication state, including user info and token.
 type AuthUser = {
   id: number;
   email: string;
