@@ -18,6 +18,8 @@ export default function AdminDashboard() {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [categoryName, setCategoryName] = useState('');
+  const [editingCategoryId, setEditingCategoryId] = useState<number | null>(null);
+  const [editingCategoryName, setEditingCategoryName] = useState('');
   const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
 
@@ -62,6 +64,40 @@ export default function AdminDashboard() {
     } finally { setSaving(false); }
   };
 
+  const startEditCategory = (category: Category) => {
+    setEditingCategoryId(category.id);
+    setEditingCategoryName(category.name);
+  };
+
+  const saveCategory = async (id: number) => {
+    setError('');
+    const name = editingCategoryName.trim();
+    if (!name) return setError('اسم القسم مطلوب.');
+    setSaving(true);
+    try {
+      const res = await api(`/categories/${id}`, { method: 'PATCH', body: JSON.stringify({ name }) });
+      if (res?.message) return setError(Array.isArray(res.message) ? res.message.join(', ') : res.message);
+      setCategories((prev) => prev.map((c) => (c.id === id ? { ...c, name } : c)));
+      setEditingCategoryId(null);
+      setEditingCategoryName('');
+    } finally { setSaving(false); }
+  };
+
+  const deleteCategory = async (id: number) => {
+    if (!confirm('هل تريد حذف هذا القسم؟')) return;
+    setError('');
+    setSaving(true);
+    try {
+      const res = await api(`/categories/${id}`, { method: 'DELETE' });
+      if (res?.message) return setError(Array.isArray(res.message) ? res.message.join(', ') : res.message);
+      setCategories((prev) => prev.filter((c) => c.id !== id));
+      if (editingCategoryId === id) {
+        setEditingCategoryId(null);
+        setEditingCategoryName('');
+      }
+    } finally { setSaving(false); }
+  };
+
   if (!hydrated || !user) return <p>جارٍ التحميل...</p>;
 
   return (
@@ -74,7 +110,40 @@ export default function AdminDashboard() {
           <input value={categoryName} onChange={(e) => setCategoryName(e.target.value)} className="w-full rounded border p-2" />
           <Button onClick={addCategory} disabled={saving} variant="primary">{saving ? 'جارٍ الحفظ...' : 'إضافة'}</Button>
         </div>
-        <ul className="list-disc pl-5 text-sm text-gray-500 space-y-1">{categories.map((c) => <li key={c.id}>{c.name}</li>)}</ul>
+        <ul className="space-y-2 text-sm text-gray-700">
+          {categories.map((c) => (
+            <li key={c.id} className="flex items-center gap-2">
+              {editingCategoryId === c.id ? (
+                <>
+                  <input
+                    value={editingCategoryName}
+                    onChange={(e) => setEditingCategoryName(e.target.value)}
+                    className="w-full rounded border p-2"
+                  />
+                  <Button onClick={() => saveCategory(c.id)} disabled={saving} variant="primary">
+                    حفظ
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      setEditingCategoryId(null);
+                      setEditingCategoryName('');
+                    }}
+                    disabled={saving}
+                    variant="secondary"
+                  >
+                    إلغاء
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <span className="flex-1">{c.name}</span>
+                  <Button onClick={() => startEditCategory(c)} disabled={saving} variant="secondary">تعديل</Button>
+                  <Button onClick={() => deleteCategory(c.id)} disabled={saving} variant="secondary">حذف</Button>
+                </>
+              )}
+            </li>
+          ))}
+        </ul>
       </section>
 
       <section className="bg-white rounded-2xl border border-gray-200 shadow-md p-6 space-y-2">

@@ -9,13 +9,14 @@ import Button from '../ui/Button';
 const defaultNav = [
   { href: '/', label: 'الرئيسية' },
   { href: '/services', label: 'الخدمات' },
-  { href: '/dashboard/technician', label: 'لوحة التحكم' },
+  { href: '/dashboard', label: 'لوحة التحكم' },
 ];
 
 export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
   const { user, hydrate, hydrated, logout } = useAuthStore();
+  const dashboardHref = user?.role === 'ADMIN' ? '/dashboard/admin' : '/dashboard/technician';
 
   useEffect(() => { hydrate(); }, [hydrate]);
   useEffect(() => {
@@ -36,11 +37,12 @@ export default function Navbar() {
 
         <div className="flex items-center gap-2 sm:gap-3">
           {defaultNav.map((item) => {
-            const isActive = pathname === item.href;
+            const href = item.href === '/dashboard' ? dashboardHref : item.href;
+            const isActive = pathname === href;
             return (
               <Link
                 key={item.href}
-                href={item.href}
+                href={href}
                 className={`rounded-full px-4 py-2 text-sm font-medium transition ${isActive ? 'active' : ''}`}
               >
                 {item.label}
