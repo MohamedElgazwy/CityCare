@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useAuthStore } from '@/store/authStore';
 import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
+import Button from '@/components/ui/Button';
 
 type Category = { id: number; name: string };
 type Technician = {
@@ -53,18 +54,18 @@ export default function ServicesPage() {
         <p className="mt-2 muted">صفِّ النتائج حسب التخصص والميزانية والتقييم لاختيار الفنّي المناسب.</p>
 
         <div className="mt-6 grid gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm md:grid-cols-5">
-          <input placeholder="ابحث بالاسم" onChange={(e) => setName(e.target.value)} className="rounded-lg border border-slate-300 px-3 py-2" />
-          <select onChange={(e) => setCategoryId(e.target.value)} className="rounded-lg border border-slate-300 px-3 py-2">
+          <input placeholder="ابحث بالاسم" onChange={(e) => setName(e.target.value)} className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all" />
+          <select onChange={(e) => setCategoryId(e.target.value)} className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all">
             <option value="">كل الأقسام</option>
             {categories.map((c) => (
               <option key={c.id} value={c.id}>{c.name}</option>
             ))}
           </select>
-          <input placeholder="أقل سعر" type="number" onChange={(e) => setMinPrice(e.target.value)} className="rounded-lg border border-slate-300 px-3 py-2" />
-          <input placeholder="أقل تقييم" type="number" onChange={(e) => setRating(e.target.value)} className="rounded-lg border border-slate-300 px-3 py-2" />
-          <button onClick={search} className="rounded-lg bg-slate-900 px-4 py-2 font-semibold text-white hover:bg-slate-700">
+          <input placeholder="أقل سعر" type="number" onChange={(e) => setMinPrice(e.target.value)} className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all" />
+          <input placeholder="أقل تقييم" type="number" onChange={(e) => setRating(e.target.value)} className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all" />
+          <Button onClick={search} variant="primary">
             {isLoading ? 'جارٍ البحث...' : 'بحث'}
-          </button>
+          </Button>
         </div>
 
         <div className="mt-6 grid gap-4 md:grid-cols-2">
@@ -78,7 +79,7 @@ export default function ServicesPage() {
                 <span>⭐ {t.rating}</span>
               </div>
               <div className="mt-4 flex gap-2">
-                <button
+                <Button
                 onClick={async () => {
                   try {
                     await api('/bookings', { method: 'POST', body: JSON.stringify({ technicianId: t.id }) });
@@ -87,11 +88,12 @@ export default function ServicesPage() {
                     alert('فشل حجز الفنّي. يرجى المحاولة مرة أخرى.');
                   }
                 }}
-                className="mt-4 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-500"
+                variant="primary"
+                size="sm"
               >
                 احجز الآن
-              </button>
-                <button onClick={() => router.push(`/technicians/${t.id}`)} className="mt-4 rounded-lg border px-4 py-2 text-sm font-semibold">عرض الملف الشخصي</button>
+              </Button>
+                <Button onClick={() => router.push(`/technicians/${t.id}`)} variant="secondary" size="sm">عرض الملف الشخصي</Button>
               </div>
             </article>
           ))}

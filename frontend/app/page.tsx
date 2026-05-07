@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 export default function Home() {
   return (
-    <main className="bg-slate-50">
+    <main className="bg-gradient-to-r from-white-70 to-gray-50 shadow-soft">
       <section className="mx-auto flex min-h-[calc(100vh-4rem)] w-full max-w-7xl flex-col justify-center px-6 py-16 lg:px-8">
         <span className="mb-5 inline-flex w-fit items-center rounded-full bg-indigo-100 px-3 py-1 text-sm font-medium text-indigo-700">
           منصة موثوقة لخدمات المنزل

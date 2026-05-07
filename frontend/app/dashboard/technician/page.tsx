@@ -117,14 +117,14 @@ export default function TechnicianDashboard() {
   if (user.role !== 'TECHNICIAN') {
     return (
       <Card className="space-y-4">
-        <h1 className="heading-2" style={{ color: 'var(--accent)' }}>طلب ملف فنّي</h1>
-        <p className="muted">قدّم ملفك لتصبح فنّيًا.</p>
+        <h1 className="text-2xl font-bold text-primary-600">طلب ملف فنّي</h1>
+        <p className="text-gray-500">قدّم ملفك لتصبح فنّيًا.</p>
 
-        <input value={form.name} onChange={(e) => setForm((prev) => ({ ...prev, name: e.target.value }))} placeholder="الاسم الكامل" className="w-full rounded border p-2" />
-        <input value={form.phone} onChange={(e) => setForm((prev) => ({ ...prev, phone: e.target.value }))} placeholder="الهاتف" className="w-full rounded border p-2" />
-        <textarea value={form.description} onChange={(e) => setForm((prev) => ({ ...prev, description: e.target.value }))} placeholder="الوصف" className="w-full rounded border p-2" />
-        <input type="number" value={form.price} onChange={(e) => setForm((prev) => ({ ...prev, price: e.target.value }))} placeholder="سعر الخدمة" className="w-full rounded border p-2" />
-        <select value={form.categoryId} onChange={(e) => setForm((prev) => ({ ...prev, categoryId: e.target.value }))} className="w-full rounded border p-2 bg-white">
+        <input value={form.name} onChange={(e) => setForm((prev) => ({ ...prev, name: e.target.value }))} placeholder="الاسم الكامل" className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all" />
+        <input value={form.phone} onChange={(e) => setForm((prev) => ({ ...prev, phone: e.target.value }))} placeholder="الهاتف" className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all" />
+        <textarea value={form.description} onChange={(e) => setForm((prev) => ({ ...prev, description: e.target.value }))} placeholder="الوصف" className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all" />
+        <input type="number" value={form.price} onChange={(e) => setForm((prev) => ({ ...prev, price: e.target.value }))} placeholder="سعر الخدمة" className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all" />
+        <select value={form.categoryId} onChange={(e) => setForm((prev) => ({ ...prev, categoryId: e.target.value }))} className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all">
           <option value="">اختر القسم</option>
           {categories.map((c) => (
             <option key={c.id} value={c.id}>{c.name}</option>
@@ -132,8 +132,8 @@ export default function TechnicianDashboard() {
         </select>
 
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-slate-700">صورة الملف الشخصي (مطلوبة)</label>
-          <input type="file" accept="image/*" onChange={(e) => e.target.files?.[0] && uploadPhoto(e.target.files[0])} className="w-full rounded border p-2" />
+          <label className="block text-sm font-medium text-gray-700">صورة الملف الشخصي (مطلوبة)</label>
+          <input type="file" accept="image/*" onChange={(e) => e.target.files?.[0] && uploadPhoto(e.target.files[0])} className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all" />
           {form.photoUrl && <img src={form.photoUrl} alt="معاينة" className="h-24 w-24 rounded-full object-cover" />}
         </div>
 
@@ -149,11 +149,11 @@ export default function TechnicianDashboard() {
 
   return (
     <div className="space-y-4">
-      <h1 className="heading-2" style={{ color: 'var(--accent)' }}>لوحة تحكم الفنّي</h1>
+      <h1 className="text-2xl font-bold text-primary-600">لوحة تحكم الفنّي</h1>
       {bookings.map((b) => (
         <Card key={b.id} className="rounded-2xl">
           <p>الحجز #{b.id} - {b.status}</p>
-          {b.user?.email && <p className="muted">العميل: {b.user.email}</p>}
+          {b.user?.email && <p className="text-gray-500">العميل: {b.user.email}</p>}
           <div className="mt-3 flex gap-2">
             {b.status === 'pending' && <>
               <Button onClick={() => updateStatus(b.id, 'accept', 'accepted')} variant="primary">قبول</Button>

@@ -68,16 +68,16 @@ export default function AdminDashboard() {
     <div className="space-y-6">
       <h1 className="heading-2" style={{ color: 'var(--accent)' }}>لوحة تحكم المدير</h1>
       {error && <p className="text-red-500">{error}</p>}
-      <section className="card space-y-3">
+      <section className="bg-white rounded-2xl border border-gray-200 shadow-md p-6 space-y-3">
         <h2 className="text-lg font-semibold">أقسام الخدمات</h2>
         <div className="flex gap-2">
           <input value={categoryName} onChange={(e) => setCategoryName(e.target.value)} className="w-full rounded border p-2" />
           <Button onClick={addCategory} disabled={saving} variant="primary">{saving ? 'جارٍ الحفظ...' : 'إضافة'}</Button>
         </div>
-        <ul className="list-disc pl-5 text-sm muted space-y-1">{categories.map((c) => <li key={c.id}>{c.name}</li>)}</ul>
+        <ul className="list-disc pl-5 text-sm text-gray-500 space-y-1">{categories.map((c) => <li key={c.id}>{c.name}</li>)}</ul>
       </section>
 
-      <section className="space-y-2">
+      <section className="bg-white rounded-2xl border border-gray-200 shadow-md p-6 space-y-2">
         <h2 className="text-lg font-semibold">طلبات الفنيين</h2>
         {techs.map((t) => (
           <Card key={t.id} className="rounded">
@@ -91,7 +91,7 @@ export default function AdminDashboard() {
         ))}
       </section>
 
-      <section className="space-y-2">
+      <section className="bg-white rounded-2xl border border-gray-200 shadow-md p-6 space-y-2">
         <h2 className="text-lg font-semibold">مراقبة الحجوزات</h2>
         {bookings.map((b) => <p key={b.id}>#{b.id} - {b.status} {b.user?.email ? `(${b.user.email})` : ''}</p>)}
       </section>

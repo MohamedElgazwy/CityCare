@@ -38,14 +38,14 @@ export default function ProfilePage() {
   if (!hydrated || !user) return <p className="p-6">جارٍ التحميل...</p>;
 
   return (
-    <main className="min-h-screen bg-slate-50 px-6 py-8 lg:px-8">
+    <main className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary-50 px-6 py-8 lg:px-8">
       <div className="mx-auto max-w-3xl">
-        <div className="rounded-2xl border theme-card p-6 shadow-sm" style={{ borderColor: 'var(--accent)' }}>
+        <div className="rounded-2xl bg-white border border-gray-200 shadow-md p-6" style={{ borderColor: 'var(--accent)' }}>
           <div className="flex items-center gap-4">
             <img src={details?.photoUrl || user.photoUrl || '/placeholder-avatar.png'} alt="الصورة الشخصية" className="h-20 w-20 rounded-full object-cover" style={{ border: '3px solid var(--accent)' }} />
             <div>
               <h1 className="text-2xl font-bold" style={{ color: 'var(--accent)' }}>{details?.name || user.name || user.email}</h1>
-              <p className="text-sm muted">{details?.email || user.email}</p>
+              <p className="text-sm text-gray-500">{details?.email || user.email}</p>
               {details?.technicianProfile ? (
                 <p className="mt-1 text-sm">
                   حالة طلب الفنّي: <strong>{details.technicianProfile.isApproved ? 'مقبول' : 'قيد المراجعة'}</strong>
@@ -76,7 +76,7 @@ export default function ProfilePage() {
                     </div>
                     {b.status === 'completed' && (
                       <div className="mt-3">
-                        <p className="text-sm muted">اترك تقييمًا لهذا الحجز</p>
+                        <p className="text-sm text-gray-500">اترك تقييمًا لهذا الحجز</p>
                         <ReviewForm bookingId={b.id} onSuccess={async () => {
                           // refresh bookings list
                           const list = await api('/bookings/me');

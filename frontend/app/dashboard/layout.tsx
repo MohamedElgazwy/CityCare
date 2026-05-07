@@ -21,7 +21,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   return (
     <div className="min-h-screen page-container">
       <div className="mx-auto grid max-w-7xl gap-6 px-6 py-8 lg:grid-cols-[250px_1fr] lg:px-8">
-        <aside className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+        <aside className="rounded-xl bg-white/90 backdrop-blur border border-gray-200/50 p-5 shadow-soft">
           <h2 className="mb-4 text-lg font-semibold text-slate-900">Dashboard</h2>
           <div className="space-y-2">
             {dashboardLinks.map((link) => {

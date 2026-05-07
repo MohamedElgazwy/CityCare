@@ -55,7 +55,7 @@ export default function TechnicianDetails({ id }: { id: number }) {
   };
 
   return (
-    <main className="min-h-screen bg-slate-50 px-6 py-10">
+    <main className="min-h-screen bg-gradient-to-br from-gray-50 to-primary-50/30 px-6 py-10">
       <div className="mx-auto max-w-6xl space-y-8">
 
         {/* ===== Top Section ===== */}

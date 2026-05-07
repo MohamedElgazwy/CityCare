@@ -35,7 +35,7 @@ export default function ReviewForm({ bookingId, onSuccess }: Props) {
     <div className="mt-2 space-y-2">
       <div className="flex items-center gap-2">
         <label className="text-sm">التقييم</label>
-        <select value={rating} onChange={(e) => setRating(Number(e.target.value))} className="rounded border p-1">
+        <select value={rating} onChange={(e) => setRating(Number(e.target.value))} className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all">
           {[5,4,3,2,1].map((r) => <option key={r} value={r}>{r} ★</option>)}
         </select>
       </div>

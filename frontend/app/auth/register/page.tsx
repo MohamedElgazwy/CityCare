@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { api } from '@/lib/api';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/authStore';
+import Button from '@/components/ui/Button';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -73,7 +74,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <main className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-slate-50 px-6">
+    <main className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-gradient-to-br from-primary-50 via-white to-secondary-50 px-6">
       <section className="w-full max-w-md rounded-2xl border bg-white p-8 shadow-sm">
         <h1 className="text-2xl font-bold">إنشاء حساب</h1>
         <p className="text-sm text-gray-500 mt-1">
@@ -116,13 +117,14 @@ export default function RegisterPage() {
             <p className="text-red-500 text-sm">{error}</p>
           )}
 
-          <button
+          <Button
             onClick={handleRegister}
             disabled={loading}
-            className="w-full bg-black text-white p-2 rounded hover:bg-gray-800"
+            variant="primary"
+            className="w-full"
           >
             {loading ? 'جارٍ إنشاء الحساب...' : 'تسجيل'}
-          </button>
+          </Button>
         </div>
       </section>
     </main>
