@@ -3,6 +3,7 @@ module.exports = {
     './app/**/*.{ts,tsx,jsx,js,html}',
     './components/**/*.{ts,tsx,jsx,js,html}',
   ],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
@@ -15,17 +16,16 @@ module.exports = {
       shadows: [
         '0 2px 8px 0 rgba(0,0,0,0.1)',
         '0 4px 12px 0 rgba(0,0,0,0.15)',
-        '0 6px 16px 0 rgba(0,0,0,0.2)
+        '0 6px 16px 0 rgba(0,0,0,0.2)'
       ],
-      screens: [
-        'min-width: 320px',
-        'min-width: 480px',
-        'min-width: 768px',
-        'min-width: 1024px',
-        'min-width: 1280px'
-      ]
-    },
-    darkMode: 'class',
+      screens: {
+        xs: '320px',
+        sm: '480px',
+        md: '768px',
+        lg: '1024px',
+        xl: '1280px'
+      }
+    }
   },
   plugins: [
     require('@tailwindcss/forms')
